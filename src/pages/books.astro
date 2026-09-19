@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { books } from '../data/books';
+---
+<BaseLayout title="Books" description="Technical books by Kamish Upadhyay on agentic AI platforms, quantum computing for AI engineers, and AI leadership.">
+  <h1>Books</h1>
+  <p>Free to read and download. Add new titles by editing <code>src/data/books.ts</code> and dropping the PDF into <code>public/books/</code>.</p>
+
+  {books.map((book) => (
+    <div class="card" id={book.slug}>
+      <h2 style="margin-top:0;">{book.title}</h2>
+      <p class="meta" style="margin: -6px 0 10px;">{book.edition} · {book.pages} pages</p>
+      <p style="font-weight: 600; color: var(--color-text-soft); margin-bottom: 10px;">{book.subtitle}</p>
+      <p>{book.description}</p>
+      <a class="btn btn-primary" href={book.file} download>Download PDF</a>
+    </div>
+  ))}
+</BaseLayout>

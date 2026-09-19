@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { experience, skills } from '../data/experience';
+import { SITE } from '../data/site';
+---
+<BaseLayout title="Work" description="Experience, skills, and consulting availability for Kamish Upadhyay, Senior GenAI / AI Architect.">
+  <h1>Work</h1>
+  <p>8+ years across AI research, applied ML, and enterprise GenAI architecture in financial services.</p>
+
+  <h2>Experience</h2>
+  {experience.map((role) => (
+    <div class="timeline-item">
+      <h3>{role.title} · {role.company}</h3>
+      <p class="meta" style="margin: 0 0 10px;">{role.period} — {role.location}</p>
+      <ul>
+        {role.bullets.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  ))}
+
+  <h2>Skills</h2>
+  {Object.entries(skills).map(([group, items]) => (
+    <p><strong>{group}:</strong> {items.join(', ')}</p>
+  ))}
+
+  <h2>Education &amp; certifications</h2>
+  <p>B.Tech, Information Technology — Kamla Nehru Institute of Technology (KNIT), Sultanpur, IN (2014–2018).</p>
+  <p>Certified Machine Learning Expert (AppliedAI) · GATE Qualified, 97.10 percentile · Certified Deep Reinforcement Learning Expert (Udemy) · Speaker, Open Machine Learning Conference, Bengaluru.</p>
+
+  <h2>Products &amp; consulting</h2>
+  <div class="card">
+    <p style="margin-bottom: 10px;">
+      I take on a limited number of advisory and delivery engagements outside my
+      full-time role — architecture reviews for RAG/agentic systems, LLM evaluation
+      and fine-tuning strategy, and AI-vendor or AI-talent sourcing for teams
+      building out a GenAI function.
+    </p>
+    <a class="btn btn-primary" href="/contact/">Get in touch</a>
+  </div>
+</BaseLayout>

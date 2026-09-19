@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+<BaseLayout title="Blog" description="Writing on GenAI systems, agentic AI, RAG, and building AI products.">
+  <h1>Blog</h1>
+  <p>Notes on building GenAI systems, agentic AI, and RAG in production — and the process behind it.</p>
+
+  {posts.length === 0 && <p>No posts yet — check back soon.</p>}
+
+  <ul class="list-plain">
+    {posts.map((post) => (
+      <li class="timeline-item">
+        <h3 style="margin-top:0;"><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+        <p class="meta" style="margin: 0 0 6px;">
+          {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+        <p style="margin:0;">{post.data.description}</p>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

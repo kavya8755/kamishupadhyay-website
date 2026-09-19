@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+---
+<BaseLayout title="Contact" description="Get in touch with Kamish Upadhyay.">
+  <h1>Contact</h1>
+  <p>
+    The fastest way to reach me is email or LinkedIn. For consulting, AI
+    advisory, or sourcing inquiries, a short note on scope and timeline helps
+    me reply faster.
+  </p>
+
+  <div class="card">
+    <p><strong>Email:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <p><strong>LinkedIn:</strong> <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedin}</a></p>
+    <p style="margin-bottom:0;"><strong>GitHub:</strong> <a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.github}</a></p>
+  </div>
+</BaseLayout>

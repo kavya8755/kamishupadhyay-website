@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+import { books } from '../data/books';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const highlights = [
+  'Led GigaOCR — a multimodal document extraction system (Hugging Face Transformers, olmOCR, vLLM, Qwen3-VL) for scanned documents, invoices, and handwritten forms.',
+  'Built a multimodal AI compliance platform analyzing chemical product regulations across 50+ countries (CLIP, FAISS, Neo4j, GPT-4) — ~70x faster compliance processing.',
+  'Designed an AI-driven onboarding & KYC verification system on AWS combining OCR and LLM-based risk profiling.',
+];
+---
+<BaseLayout title={SITE.name}>
+  <section>
+    <p class="meta" style="margin-bottom: 6px;">{SITE.location}</p>
+    <h1>{SITE.name}</h1>
+    <p style="font-size:1.15rem; color: var(--color-text-soft); margin-bottom: 18px;">
+      {SITE.role} · 8+ years
+    </p>
+    <div>
+      {SITE.tagline.split(' · ').map((t) => <span class="tag">{t}</span>)}
+    </div>
+
+    <p style="margin-top: 24px;">
+      I design and ship production LLM and agentic AI systems — retrieval-augmented
+      generation, fine-tuning (SFT/PEFT/LoRA/QLoRA), multi-turn dialogue and voice
+      agents, and MCP-based tool orchestration — for enterprise and financial-services
+      clients, end to end from architecture through deployment and monitoring.
+    </p>
+
+    <div class="button-row">
+      <a class="btn btn-primary" href={SITE.resumeHref}>Download Résumé</a>
+      <a class="btn btn-secondary" href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="btn btn-secondary" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="btn btn-secondary" href="/contact/">Contact</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Selected work</h2>
+    <ul class="list-plain">
+      {highlights.map((h) => (
+        <li class="timeline-item">
+          <p style="margin:0;">{h}</p>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/work/">Full experience &amp; project history →</a></p>
+  </section>
+
+  <section>
+    <h2>Books</h2>
+    <p>Three technical books, free to read — architecture guides on agentic AI platforms, quantum computing for AI engineers, and AI leadership.</p>
+    <ul class="list-plain">
+      {books.map((b) => (
+        <li class="timeline-item">
+          <h3 style="margin-top:0;"><a href={`/books/#${b.slug}`}>{b.title}</a></h3>
+          <p class="meta" style="margin:0;">{b.subtitle}</p>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/books/">Browse all books →</a></p>
+  </section>
+
+  {posts.length > 0 && (
+    <section>
+      <h2>Latest from the blog</h2>
+      <ul class="list-plain">
+        {posts.map((post) => (
+          <li class="timeline-item">
+            <h3 style="margin-top:0;"><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+            <p class="meta" style="margin:0 0 4px;">
+              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </p>
+            <p style="margin:0;">{post.data.description}</p>
+          </li>
+        ))}
+      </ul>
+      <p><a href="/blog/">Read all posts →</a></p>
+    </section>
+  )}
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+import { SITE } from '../data/site';
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">{SITE.name}</a>
+    <nav class="main-nav">
+      <a href="/" class={isActive('/') ? 'active' : ''}>Home</a>
+      <a href="/work/" class={isActive('/work') ? 'active' : ''}>Work</a>
+      <a href="/books/" class={isActive('/books') ? 'active' : ''}>Books</a>
+      <a href="/blog/" class={isActive('/blog') ? 'active' : ''}>Blog</a>
+      <a href="/contact/" class={isActive('/contact') ? 'active' : ''}>Contact</a>
+    </nav>
+  </div>
+</header>
