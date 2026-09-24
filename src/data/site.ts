@@ -9,7 +9,7 @@ export const SITE = {
   email: 'tagdadatascientist@gmail.com',
   github: 'https://github.com/kavya8755',
   linkedin: 'https://www.linkedin.com/in/1000kavya/',
-  resumeHref: '/resume/Kamish-Upadhyay-Resume.pdf',
+  resumeHref: '/resume/Resume_Kamish_9Yrs_GenAI.pdf',
   description:
-    'Personal site of Kamish Upadhyay, Senior GenAI / AI Architect with 8+ years building LLM, RAG, and agentic AI systems for enterprise and financial services.',
+    'Personal site of Kamish Upadhyay, Senior GenAI / AI Architect with 9 years building LLM, RAG, and agentic AI systems for enterprise and financial services.',
 };

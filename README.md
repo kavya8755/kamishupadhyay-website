@@ -50,7 +50,7 @@ Requires Node 20+.
 
 - **Update your experience/skills**: edit `src/data/experience.ts`.
 
-- **Replace your résumé**: overwrite `public/resume/Kamish-Upadhyay-Resume.pdf`
+- **Replace your résumé**: overwrite `public/resume/Resume_Kamish_9Yrs_GenAI.pdf`
   with a new file of the same name (or update the filename in `src/data/site.ts`).
 
 Commit and push to `main` — the site rebuilds and redeploys automatically
