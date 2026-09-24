@@ -1,10 +1,6 @@
 # kamishupadhyay.com
 
-Personal site for Kamish Upadhyay — Senior GenAI / AI Architect. Built with
-[Astro](https://astro.build) (static site, no server to run or patch),
-plain CSS (no UI framework to upgrade), and Markdown-based content
-collections for the blog. Total running cost: **$0/month** hosting, plus
-whatever you paid for the domain.
+Personal site for Kamish Upadhyay — Senior GenAI / AI Architect.
 
 ## What's on the site
 
@@ -12,6 +8,8 @@ whatever you paid for the domain.
 - **Work** (`/work/`) — experience timeline, skills, consulting/sourcing contact CTA.
 - **Books** (`/books/`) — your 3 books (`From Prototype to Autonomous Enterprise`,
   `Quantum Computing for AI Engineers`, `The AI CEO`), each with a PDF download.
+- **Mini Courses** (`/courses/`) — downloadable PPTX slide decks (Agentic RAG,
+  storage selection for AI, agentic frameworks, MCP, LLM evaluation, fine-tuning).
 - **Blog** (`/blog/`) — Markdown posts, with an RSS feed at `/rss.xml`.
 - **Contact** (`/contact/`) — email, LinkedIn, GitHub.
 
@@ -24,7 +22,7 @@ npm run build     # outputs static site to dist/
 npm run preview   # serve the built dist/ locally
 ```
 
-Requires Node 20+.
+Requires Node 22.12+ (Astro 7).
 
 ## How to update things (no code knowledge needed for most of this)
 
@@ -45,6 +43,9 @@ Requires Node 20+.
 - **Add a book**: drop the PDF into `public/books/`, then add an entry to
   the `books` array in `src/data/books.ts` (title, subtitle, description,
   page count, file path). No page templates to touch.
+
+- **Add a mini course**: drop the `.pptx` into `public/courses/`, then add an
+  entry to the `courses` array in `src/data/courses.ts`.
 
 - **Update your bio, email, or social links**: edit `src/data/site.ts`.
 

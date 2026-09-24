@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
 import { books } from '../data/books';
+import { courses } from '../data/courses';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -65,6 +66,20 @@ const highlights = [
       ))}
     </ul>
     <p><a href="/books/">Browse all books →</a></p>
+  </section>
+
+  <section>
+    <h2>Mini courses</h2>
+    <p>Free slide-deck courses on building production GenAI systems.</p>
+    <ul class="list-plain">
+      {courses.map((c) => (
+        <li class="timeline-item">
+          <h3 style="margin-top:0;"><a href={`/courses/#${c.slug}`}>{c.title}</a></h3>
+          <p class="meta" style="margin:0;">{c.subtitle}</p>
+        </li>
+      ))}
+    </ul>
+    <p><a href="/courses/">Browse all mini courses →</a></p>
   </section>
 
   {posts.length > 0 && (

@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { courses } from '../data/courses';
+---
+<BaseLayout title="Mini Courses" description="Free slide-deck mini courses by Kamish Upadhyay on agentic RAG, AI storage, agentic frameworks, MCP, LLM evaluation, and fine-tuning.">
+  <h1>Mini Courses</h1>
+  <p>Short, practical slide decks on building production GenAI systems. Free to download and use for learning or team sessions.</p>
+
+  {courses.map((course, i) => (
+    <div class="card" id={course.slug}>
+      <p class="meta" style="margin: 0 0 4px;">Mini course {String(i + 1).padStart(2, '0')} · {course.slides} slides</p>
+      <h2 style="margin-top:0;">{course.title}</h2>
+      <p style="font-weight: 600; color: var(--color-text-soft); margin-bottom: 10px;">{course.subtitle}</p>
+      <p class="meta" style="margin-bottom: 10px;">For: {course.audience}</p>
+      <div style="margin-bottom: 14px;">
+        {course.topics.map((t) => <span class="tag">{t}</span>)}
+      </div>
+      <a class="btn btn-primary" href={course.file} download>Download slides (PPTX)</a>
+    </div>
+  ))}
+</BaseLayout>
