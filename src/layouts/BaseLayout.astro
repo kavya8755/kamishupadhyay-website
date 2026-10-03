@@ -1,22 +1,38 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE } from '../data/site';
+import Prompt from '../components/Prompt.astro';
+import { SITE, PAGES } from '../data/site';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  /** Command shown on the page's first prompt line, e.g. "cat experience.log". */
+  cmd?: string;
 }
 
-const { title, description = SITE.description } = Astro.props;
+const { title, description = SITE.description, cmd } = Astro.props;
 const pageTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;
+
+// Working directory shown in the title bar and prompts, e.g. "~/mini-courses".
+const { pathname } = Astro.url;
+const page = PAGES.find((p) => pathname.startsWith(p.href));
+const cwd = page ? `~/${page.dir.replace(/\/$/, '')}` : '~';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      // Apply the saved theme before first paint so there is no flash.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+    <meta name="theme-color" content="#000000" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
@@ -36,12 +52,32 @@ const pageTitle = title === SITE.name ? title : `${title} · ${SITE.name}`;
     />
   </head>
   <body>
-    <Header />
-    <main>
-      <div class="wrap">
-        <slot />
-      </div>
-    </main>
+    <button class="theme-toggle" type="button" aria-label="Switch color theme">
+      <span class="when-dark">bright future</span><span class="when-light">go dark</span>
+    </button>
+
+    <div class="shell">
+      <main class="term">
+        <Header cwd={cwd}>
+          {cmd && (
+            <p class="prompt-line">
+              <span class="prompt">{SITE.handle}@{SITE.host}:{cwd}$</span> <span class="cmd">{cmd}</span>
+            </p>
+          )}
+          <slot />
+          <Prompt cwd={cwd} />
+        </Header>
+      </main>
+    </div>
     <Footer />
+
+    <script is:inline>
+      document.querySelector('.theme-toggle').addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+        root.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+      });
+    </script>
   </body>
 </html>

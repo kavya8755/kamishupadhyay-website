@@ -1,222 +1,335 @@
-:root {
-  --color-bg: #ffffff;
-  --color-bg-soft: #f6f7f9;
-  --color-border: #e5e7eb;
-  --color-text: #1a1d23;
-  --color-text-soft: #565d6b;
-  --color-accent: #2453ff;
-  --color-accent-soft: #eef1ff;
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --max-width: 780px;
-  --radius: 10px;
+/* Terminal theme. Dark ("green screen") is the default; light is opt-in via the
+   toggle and stored in localStorage. Colors are tokens so both themes stay in sync. */
+:root,
+:root[data-theme="dark"] {
+  --page: #000000;
+  --win: #0a0a0a;
+  --win-border: #1f2937;
+  --bar: #1f2937;
+  --win-shadow: 0 25px 50px -12px rgba(0, 80, 20, 0.25);
+  --text: #05df72;        /* green-400: body text */
+  --text-soft: #00c950;   /* green-500: secondary text */
+  --bright: #7bf1a8;      /* green-300: commands, emphasis, links */
+  --accent: #00a63e;      /* green-600: "#" markers */
+  --banner: #00c950;
+  --muted: #7d8592;       /* prompts, dates, captions */
+  --rule: rgba(13, 84, 43, 0.6);
+  --hover-bg: rgba(5, 223, 114, 0.12);
+  --toggle-bg: rgba(0, 0, 0, 0.8);
+  --toggle-border: rgba(0, 255, 65, 0.4);
+  --toggle-text: #00ff41;
+  --error: #ff6467;
+  color-scheme: dark;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
+:root[data-theme="light"] {
+  --page: #ffffff;
+  --win: #f8f8f8;
+  --win-border: #e2e2e2;
+  --bar: #e8e8e8;
+  --win-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  --text: #364153;
+  --text-soft: #4a5565;
+  --bright: #155dfc;
+  --accent: #2b6cf0;
+  --banner: #155dfc;
+  --muted: #6a7282;
+  --rule: #e2e5ea;
+  --hover-bg: rgba(21, 93, 252, 0.08);
+  --toggle-bg: rgba(255, 255, 255, 0.85);
+  --toggle-border: rgba(0, 0, 0, 0.2);
+  --toggle-text: #333333;
+  --error: #d92d20;
   color-scheme: light;
 }
 
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  font-size: 17px;
-  line-height: 1.65;
+  background: var(--page);
+  color: var(--text);
+  font-family: Monaco, Menlo, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  font-size: 14px;
+  line-height: 1.9;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.wrap {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 24px;
-}
+::selection { background: var(--bright); color: var(--win); }
 
 a {
-  color: var(--color-accent);
-  text-decoration: none;
-}
-
-a:hover {
+  color: var(--bright);
   text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+}
+a:hover { background: var(--hover-bg); text-decoration-color: var(--bright); }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 1px dashed var(--bright);
+  outline-offset: 2px;
 }
 
-h1, h2, h3, h4 {
-  line-height: 1.25;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-h1 { font-size: 2rem; margin: 0 0 0.5rem; }
-h2 { font-size: 1.4rem; margin: 2.5rem 0 1rem; }
-h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 50;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  color: var(--toggle-text);
+  backdrop-filter: blur(8px);
+}
+.theme-toggle .when-light { display: none; }
+:root[data-theme="light"] .theme-toggle .when-light { display: inline; }
+:root[data-theme="light"] .theme-toggle .when-dark { display: none; }
 
-p { margin: 0 0 1rem; }
-
-.site-header {
-  border-bottom: 1px solid var(--color-border);
+/* ---------- terminal window ---------- */
+.shell {
+  display: flex;
+  justify-content: center;
+  padding: 20px 16px;
 }
 
-.site-header .wrap {
+.term {
+  width: 100%;
+  max-width: 780px;
+  margin: 40px 0 24px;
+  background: var(--win);
+  border: 1px solid var(--win-border);
+  border-radius: 8px;
+  box-shadow: var(--win-shadow);
+  overflow: hidden;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.term-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-top: 18px;
-  padding-bottom: 18px;
-  gap: 16px;
-  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bar);
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+.dot.red { background: #fb2c36; }
+.dot.yellow { background: #f0b100; }
+.dot.green { background: #00c950; }
+.term-title {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.brand {
+.term-body { padding: 24px; }
+
+/* ---------- nav: directories ---------- */
+.term-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.term-nav a { text-decoration: none; color: var(--text-soft); }
+.term-nav a:hover { color: var(--bright); }
+.term-nav a[aria-current="page"] {
+  color: var(--win);
+  background: var(--text);
+  padding: 0 4px;
+  margin: 0 -4px;
+}
+
+/* ---------- prompt lines ---------- */
+.prompt { color: var(--muted); }
+.cmd { color: var(--bright); }
+.prompt-line { margin: 0 0 14px; word-break: break-word; }
+
+/* ---------- typography ---------- */
+h1, h2, h3, h4 { font-size: 14px; line-height: 1.9; margin: 0; }
+
+h1 {
+  font-size: 18px;
+  color: var(--bright);
   font-weight: 700;
-  color: var(--color-text);
-  font-size: 1.05rem;
+  margin: 0 0 6px;
 }
 
-.brand:hover { text-decoration: none; }
-
-nav.main-nav {
-  display: flex;
-  gap: 22px;
-  flex-wrap: wrap;
+/* Section headers render as shell comments: "# cat /proc/status" */
+h2 {
+  font-weight: 400;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 16px;
+  margin: 22px 0 6px;
 }
+h2::before { content: "# "; color: var(--accent); }
 
-nav.main-nav a {
-  color: var(--color-text-soft);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
+h3 { color: var(--bright); font-weight: 700; margin: 14px 0 2px; }
 
-nav.main-nav a.active,
-nav.main-nav a:hover {
-  color: var(--color-text);
-  text-decoration: none;
-}
+p { margin: 0 0 12px; }
+strong { color: var(--bright); }
 
-main {
-  padding: 48px 0 80px;
-  min-height: 60vh;
-}
+.soft { color: var(--text-soft); }
+.muted, .meta { color: var(--muted); }
+.meta { font-size: 13px; }
 
-.site-footer {
-  border-top: 1px solid var(--color-border);
-  padding: 28px 0;
-  color: var(--color-text-soft);
-  font-size: 0.9rem;
-}
+/* indented block under a "# heading", like the reference's ml-4 */
+.indent { margin-left: 16px; }
 
-.site-footer .wrap {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+/* arrow list:  → item */
+.arrows, .tree, .dirs, .dots, .plain {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
 }
+.arrows > li { padding-left: 2ch; text-indent: -2ch; margin-bottom: 6px; }
+.arrows > li::before { content: "→ "; color: var(--accent); }
+
+.dots > li { padding-left: 2ch; text-indent: -2ch; margin-bottom: 4px; }
+.dots > li::before { content: "• "; color: var(--accent); }
+
+/* tree list:  ├── item  /  └── last */
+.tree { color: var(--text-soft); margin-left: 2ch; }
+.tree > li { padding-left: 4ch; text-indent: -4ch; }
+.tree > li::before { content: "├── "; color: var(--muted); }
+.tree > li:last-child::before { content: "└── "; }
+
+/* directory list:  📂 work/  (note) */
+.dirs > li { margin-bottom: 2px; padding-left: 3ch; text-indent: -3ch; }
+.dirs .note { color: var(--muted); }
+
+/* ---------- entries (roles, books, courses) ---------- */
+.entry {
+  border-left: 1px solid var(--rule);
+  padding: 2px 0 2px 16px;
+  margin: 0 0 22px;
+}
+.entry h3 { margin-top: 0; }
 
 .tag {
   display: inline-block;
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
-  border-radius: 999px;
-  padding: 3px 11px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin: 0 6px 6px 0;
+  color: var(--text-soft);
+  margin: 0 12px 0 0;
+  font-size: 13px;
 }
+.tag::before { content: "["; color: var(--muted); }
+.tag::after { content: "]"; color: var(--muted); }
 
+.kv { margin: 0 0 6px; padding-left: 2ch; text-indent: -2ch; }
+.kv .k { color: var(--bright); }
+
+/* bracket buttons: [ download pdf ] */
 .btn {
   display: inline-block;
-  padding: 10px 18px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 0.95rem;
-  border: 1px solid var(--color-border);
+  color: var(--bright);
+  text-decoration: none;
+  border: 1px solid var(--rule);
+  padding: 0 10px;
+  margin: 4px 10px 4px 0;
+  border-radius: 3px;
+}
+.btn::before { content: "[ "; color: var(--muted); }
+.btn::after { content: " ]"; color: var(--muted); }
+.btn:hover { background: var(--hover-bg); border-color: var(--bright); }
+
+.button-row { margin: 10px 0 4px; }
+
+/* ---------- ascii banner ---------- */
+.banner {
+  color: var(--banner);
+  /* Monaco lacks block/box-drawing glyphs; Menlo & co. have them at monospace width. */
+  font-family: Menlo, "DejaVu Sans Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  font-size: min(14px, 2.75vw);
+  line-height: 1.2;
+  margin: 0 0 18px;
+  white-space: pre;
+  overflow: hidden;
 }
 
-.btn:hover { text-decoration: none; }
-
-.btn-primary {
-  background: var(--color-text);
-  color: #fff;
-  border-color: var(--color-text);
-}
-
-.btn-primary:hover { opacity: 0.85; }
-
-.btn-secondary {
-  background: var(--color-bg);
-  color: var(--color-text);
-}
-
-.btn-secondary:hover { background: var(--color-bg-soft); }
-
-.button-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 20px 0;
-}
-
-.card {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: 22px 24px;
-  margin-bottom: 18px;
-  background: var(--color-bg);
-}
-
-.card:hover {
-  border-color: #d1d5db;
-}
-
-.meta {
-  color: var(--color-text-soft);
-  font-size: 0.88rem;
-}
-
-.list-plain {
-  list-style: none;
+/* ---------- interactive prompt ---------- */
+.repl { margin-top: 22px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.repl-out > div { white-space: pre-wrap; word-break: break-word; }
+.repl-out .err { color: var(--error); }
+.repl-out .hint { color: var(--muted); }
+.repl-line { display: flex; align-items: baseline; gap: 1ch; }
+.repl-line input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--bright);
+  font: inherit;
   padding: 0;
-  margin: 0;
+  caret-color: var(--bright);
 }
-
-.timeline-item {
-  padding-left: 18px;
-  border-left: 2px solid var(--color-border);
-  margin-bottom: 22px;
+.repl-line input:focus-visible { outline: none; }
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  vertical-align: middle;
+  background: var(--bright);
+  animation: blink 1s step-end infinite;
 }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }
 
-.timeline-item h3 { margin-top: 0; }
-
-.prose h2 { margin-top: 2rem; }
-.prose ul, .prose ol { padding-left: 1.3rem; }
-.prose img { max-width: 100%; border-radius: var(--radius); }
+/* ---------- blog prose ---------- */
+.prose h2 { margin-top: 26px; }
+.prose ul, .prose ol { padding-left: 3ch; }
+.prose li { margin-bottom: 4px; }
+.prose img { max-width: 100%; border: 1px solid var(--rule); }
 .prose code {
-  background: var(--color-bg-soft);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.9em;
+  color: var(--bright);
+  background: var(--hover-bg);
+  padding: 1px 4px;
+  font-family: inherit;
 }
 .prose pre {
-  background: #0f172a;
-  color: #e2e8f0;
-  padding: 16px 18px;
-  border-radius: var(--radius);
+  background: var(--page);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
   overflow-x: auto;
+  line-height: 1.6;
 }
-.prose pre code { background: none; padding: 0; color: inherit; }
+.prose pre code { background: none; padding: 0; color: var(--text); }
 .prose blockquote {
-  border-left: 3px solid var(--color-accent);
-  margin: 1.2rem 0;
-  padding: 0.2rem 0 0.2rem 1rem;
-  color: var(--color-text-soft);
+  margin: 14px 0;
+  padding: 0 0 0 14px;
+  border-left: 2px solid var(--accent);
+  color: var(--text-soft);
+}
+
+/* ---------- footer ---------- */
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 0 16px 40px;
 }
 
 @media (max-width: 600px) {
-  h1 { font-size: 1.6rem; }
-  body { font-size: 16px; }
+  .term { margin-top: 48px; }
+  .term-body { padding: 18px 16px; }
+  .indent { margin-left: 8px; }
+  .entry { padding-left: 12px; }
 }

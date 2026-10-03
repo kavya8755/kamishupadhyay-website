@@ -2,17 +2,17 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { books } from '../data/books';
 ---
-<BaseLayout title="Books" description="Technical books by Kamish Upadhyay on agentic AI platforms, quantum computing for AI engineers, and AI leadership.">
+<BaseLayout title="Books" cmd="ls -l ~/books/" description="Technical books by Kamish Upadhyay on agentic AI platforms, quantum computing for AI engineers, and AI leadership.">
   <h1>Books</h1>
-  <p>Free to read and download.</p>
+  <p class="soft">Free to read and download.</p>
 
   {books.map((book) => (
-    <div class="card" id={book.slug}>
-      <h2 style="margin-top:0;">{book.title}</h2>
-      <p class="meta" style="margin: -6px 0 10px;">{book.edition} · {book.pages} pages</p>
-      <p style="font-weight: 600; color: var(--color-text-soft); margin-bottom: 10px;">{book.subtitle}</p>
+    <div class="entry" id={book.slug}>
+      <h3>📕 {book.title}</h3>
+      <p class="meta" style="margin: 0 0 6px;">{book.edition} · {book.pages} pages</p>
+      <p class="soft" style="margin-bottom: 6px;">{book.subtitle}</p>
       <p>{book.description}</p>
-      <a class="btn btn-primary" href={book.file} download>Download PDF</a>
+      <a class="btn" href={book.file} download>download pdf</a>
     </div>
   ))}
 </BaseLayout>

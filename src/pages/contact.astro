@@ -2,17 +2,20 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
 ---
-<BaseLayout title="Contact" description="Get in touch with Kamish Upadhyay.">
+<BaseLayout title="Contact" cmd="cat ~/.social" description="Get in touch with Kamish Upadhyay.">
   <h1>Contact</h1>
-  <p>
+  <p class="soft">
     The fastest way to reach me is email or LinkedIn. For consulting, AI
     advisory, or sourcing inquiries, a short note on scope and timeline helps
     me reply faster.
   </p>
 
-  <div class="card">
-    <p><strong>Email:</strong> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
-    <p><strong>LinkedIn:</strong> <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedin}</a></p>
-    <p style="margin-bottom:0;"><strong>GitHub:</strong> <a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.github}</a></p>
+  <h2>channels</h2>
+  <div class="indent">
+    <p class="kv"><span class="k">email:</span> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    <p class="kv"><span class="k">linkedin:</span> <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedin.replace('https://www.', '')}</a></p>
+    <p class="kv"><span class="k">github:</span> <a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.github.replace('https://', '')}</a></p>
+    <p class="kv"><span class="k">huggingface:</span> <a href={SITE.huggingface} target="_blank" rel="noopener noreferrer">{SITE.huggingface.replace('https://', '')}</a></p>
+    <p class="kv"><span class="k">location:</span> {SITE.location} · {SITE.relocation.toLowerCase()}</p>
   </div>
 </BaseLayout>

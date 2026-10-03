@@ -1,102 +1,84 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE } from '../data/site';
-import { books } from '../data/books';
-import { courses } from '../data/courses';
+import { SITE, PAGES } from '../data/site';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 
+const banner = `
+██╗  ██╗ █████╗ ███╗   ███╗██╗███████╗██╗  ██╗
+██║ ██╔╝██╔══██╗████╗ ████║██║██╔════╝██║  ██║
+█████╔╝ ███████║██╔████╔██║██║███████╗███████║
+██╔═██╗ ██╔══██║██║╚██╔╝██║██║╚════██║██╔══██║
+██║  ██╗██║  ██║██║ ╚═╝ ██║██║███████║██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚═╝  ╚═╝`;
+
 const highlights = [
-  'Architected a real-time fraud platform for money-mule networks (XGBoost, graph analytics, GigaChat LLM/RAG, investigation agent) — 99.5% PR-AUC, 4.25ms latency, 82% reduction in fraud losses.',
-  'Architected an enterprise agentic AI analytics platform with LLM tool-calling and Text-to-SQL, giving conversational decision intelligence over sales, inventory, and logistics data.',
-  'Designed an agentic KYC onboarding & compliance platform on AWS (LangGraph, Bedrock, hybrid RAG with per-claim citations) with PII redaction and human-in-the-loop review.',
+  'Real-time fraud platform for money-mule networks (XGBoost + graph analytics + GigaChat SLM + investigation agent): 99.5% PR-AUC, 4.25ms latency, 82% lower fraud losses.',
+  'Enterprise agentic AI analytics platform with LLM tool-calling and Text-to-SQL: conversational decision intelligence over sales, inventory and logistics data.',
+  'LLM-driven KYC onboarding: OCR + LLM field validation, GenAI case summaries and an explainable credit-risk model, kept on the bank\'s own infrastructure.',
 ];
 ---
 <BaseLayout title={SITE.name}>
-  <section>
-    <p class="meta" style="margin-bottom: 6px;">{SITE.location}</p>
-    <h1>{SITE.name}</h1>
-    <p style="font-size:1.15rem; color: var(--color-text-soft); margin-bottom: 18px;">
-      {SITE.role} · 9 years
-    </p>
-    <div>
-      {SITE.tagline.split(' · ').map((t) => <span class="tag">{t}</span>)}
-    </div>
+  <h1 class="sr-only">{SITE.name}, {SITE.role}</h1>
+  <pre class="banner" aria-hidden="true">{banner}</pre>
 
-    <p style="margin-top: 24px;">
-      I design and ship production LLM and agentic AI systems — retrieval-augmented
-      generation, fine-tuning (SFT/PEFT/LoRA/QLoRA), multi-turn dialogue systems, and
-      MCP-based tool orchestration — with responsible AI and model explainability built
-      in — for enterprise and financial-services clients, end to end from client
-      requirements through deployment, monitoring, and enhancement.
-    </p>
+  <p>
+    <span class="prompt">$</span> <span class="cmd">echo $ROLE</span><br />
+    <strong>"{SITE.role} · {SITE.years}"</strong>
+  </p>
 
-    <div class="button-row">
-      <a class="btn btn-primary" href={SITE.resumeHref}>Download Résumé</a>
-      <a class="btn btn-secondary" href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a class="btn btn-secondary" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a class="btn btn-secondary" href="/contact/">Contact</a>
-    </div>
-  </section>
+  <h2>cat /proc/status</h2>
+  <ul class="arrows indent">
+    <li>Currently: Gen AI Architect at SBER Bank India, building a real-time, explainable fraud-detection platform</li>
+    <li>
+      Previously:
+      <ul class="tree">
+        <li>Lead AI Engineer at EY (agentic AI analytics, Text-to-SQL)</li>
+        <li>Senior Data Scientist at Société Générale (LLM-driven KYC onboarding)</li>
+        <li>Applied ML Engineer at TCS Research (NLP chatbots, Spark/Hadoop ML)</li>
+        <li>Applied ML Engineer at GateOverflow (NLP sentiment analysis)</li>
+      </ul>
+    </li>
+    <li>Focus: {SITE.tagline}</li>
+    <li>Based in {SITE.location} · {SITE.relocation.toLowerCase()}</li>
+    <li>Résumé: <a href={SITE.resumeHref}>Resume_Kamish_9Yrs_GenAI.pdf</a></li>
+  </ul>
 
-  <section>
-    <h2>Selected work</h2>
-    <ul class="list-plain">
-      {highlights.map((h) => (
-        <li class="timeline-item">
-          <p style="margin:0;">{h}</p>
-        </li>
-      ))}
-    </ul>
-    <p><a href="/work/">Full experience &amp; project history →</a></p>
-  </section>
+  <h2>ls ~/pages/</h2>
+  <ul class="dirs indent">
+    {PAGES.map((p) => (
+      <li>📂 <a href={p.href}>{p.dir}</a> <span class="note">({p.note})</span></li>
+    ))}
+  </ul>
 
-  <section>
-    <h2>Books</h2>
-    <p>Three technical books, free to read — architecture guides on agentic AI platforms, quantum computing for AI engineers, and AI leadership.</p>
-    <ul class="list-plain">
-      {books.map((b) => (
-        <li class="timeline-item">
-          <h3 style="margin-top:0;"><a href={`/books/#${b.slug}`}>{b.title}</a></h3>
-          <p class="meta" style="margin:0;">{b.subtitle}</p>
-        </li>
-      ))}
-    </ul>
-    <p><a href="/books/">Browse all books →</a></p>
-  </section>
-
-  <section>
-    <h2>Mini courses</h2>
-    <p>Free slide-deck courses on building production GenAI systems.</p>
-    <ul class="list-plain">
-      {courses.map((c) => (
-        <li class="timeline-item">
-          <h3 style="margin-top:0;"><a href={`/courses/#${c.slug}`}>{c.title}</a></h3>
-          <p class="meta" style="margin:0;">{c.subtitle}</p>
-        </li>
-      ))}
-    </ul>
-    <p><a href="/courses/">Browse all mini courses →</a></p>
-  </section>
+  <h2>cat ~/highlights.txt</h2>
+  <ul class="dots indent">
+    {highlights.map((h) => <li>{h}</li>)}
+  </ul>
 
   {posts.length > 0 && (
-    <section>
-      <h2>Latest from the blog</h2>
-      <ul class="list-plain">
+    <>
+      <h2>ls -t ~/blog/ | head -3</h2>
+      <ul class="plain indent">
         {posts.map((post) => (
-          <li class="timeline-item">
-            <h3 style="margin-top:0;"><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
-            <p class="meta" style="margin:0 0 4px;">
-              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-            <p style="margin:0;">{post.data.description}</p>
+          <li>
+            <span class="muted">{post.data.pubDate.toISOString().slice(0, 10)}</span>{' '}
+            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
           </li>
         ))}
       </ul>
-      <p><a href="/blog/">Read all posts →</a></p>
-    </section>
+    </>
   )}
+
+  <h2>cat ~/.social</h2>
+  <p class="indent">
+    <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> ·{' '}
+    <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> ·{' '}
+    <a href={SITE.huggingface} target="_blank" rel="noopener noreferrer">Hugging Face</a> ·{' '}
+    <a href={`mailto:${SITE.email}`}>Email</a> ·{' '}
+    <a href="/rss.xml">RSS</a>
+  </p>
 </BaseLayout>

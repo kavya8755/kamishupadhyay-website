@@ -15,13 +15,13 @@ export const experience: Role[] = [
     location: 'Bengaluru, IN',
     bullets: [
       'Fraudulent money-mule networks were causing significant losses and needed faster, explainable investigation.',
-      'Architected an end-to-end XGBoost + graph analytics + GigaChat LLM/RAG fraud platform with real-time scoring, SHAP explainability, cost-based thresholding, and an investigation agent.',
+      'Architected an end-to-end XGBoost + graph analytics + GigaChat SLM fraud platform with real-time scoring, SHAP explainability, cost-based thresholding, and an investigation agent.',
       'Achieved 99.5% PR-AUC, 100% recovery of simulated fraud rings, 4.25ms latency, and an 82% reduction in fraud losses versus the baseline.',
     ],
   },
   {
     company: 'Ernst & Young LLP',
-    title: 'Senior AI Engineer',
+    title: 'Lead AI Engineer',
     period: 'Apr 2024 – Jul 2025',
     location: 'Bengaluru, IN',
     bullets: [
@@ -33,19 +33,19 @@ export const experience: Role[] = [
   {
     company: 'Société Générale',
     title: 'Senior Data Scientist',
-    period: 'May 2022 – Mar 2024',
+    period: 'Apr 2022 – Mar 2024',
     location: 'Bengaluru, IN',
     bullets: [
-      'Designed an end-to-end agentic onboarding and compliance platform to reduce manual KYC effort, covering document processing, KYC verification, sanctions/PEP screening, and credit-risk assessment.',
-      'Built a LangGraph supervisor with specialist agents and tools — Tesseract OCR with a vision-LLM fallback, an ML credit model with SHAP explanations, and hybrid-RAG compliance memos with a citation for every claim — deployed on AWS (Bedrock, ECS, Step Functions, KMS) with PII redaction, prompt-injection defences, and human-in-the-loop review.',
-      'Delivered an auditable, replayable onboarding pipeline with CI evaluation gates, per-stage latency and cost budgets, and bias testing.',
+      'Tasked with cutting manual effort in customer onboarding, designed an LLM-driven platform to automate document processing, KYC verification, and credit-risk assessment.',
+      'Built the pipeline in Python: Tesseract OCR with OpenCV preprocessing for document extraction, LLM-based field validation and GenAI case summarization, and an ML credit-risk model with SHAP explanations, protected by PII masking and human-in-the-loop review, and deployed on on-premise Linux servers through Jenkins CI/CD pipelines.',
+      'Delivered automated, auditable compliance workflows that made onboarding faster and more consistent while keeping sensitive customer data inside the bank\'s own infrastructure.',
       'Developed a production predictive model for justifying Net Asset Value (NAV) in investment management using decision trees, RabbitMQ, Python, AWS S3, PostgreSQL, Airflow, Docker, and Kubernetes.',
     ],
   },
   {
     company: 'TCS Research',
     title: 'Applied Machine Learning Engineer',
-    period: 'Feb 2019 – Apr 2022',
+    period: 'Feb 2019 – Mar 2022',
     location: 'Bengaluru, IN',
     bullets: [
       'Built an NLP-based query chatbot (Django) for issue searching and a next-word-prediction module using an LSTM sequential model (Keras/TensorFlow/PyTorch).',
@@ -64,10 +64,10 @@ export const experience: Role[] = [
 ];
 
 export const skills = {
-  'AI/ML': ['CNN', 'LSTM', 'XGBoost', 'AutoML', 'Predictive Modelling', 'Time Series', 'LLM Response Optimization'],
+  'AI/ML': ['CNN', 'LSTM', 'XGBoost', 'AutoML', 'Predictive Modelling', 'Time Series', 'LLM Response/Inference Optimization'],
   'GenAI': ['Prompt/Context Engineering', 'RAG', 'Agentic AI', 'SFT', 'PEFT', 'LoRA', 'QLoRA', 'MCP', 'OCR', 'vLLM'],
-  'Programming': ['Python', 'SQL', 'JavaScript', 'TypeScript'],
+  'Programming': ['Python', 'SQL', 'Java'],
   'Frameworks': ['TensorFlow', 'PyTorch', 'FastAPI', 'LangChain', 'LangGraph', 'LlamaIndex', 'Hugging Face', 'Weights & Biases'],
-  'DevOps': ['Git', 'Docker', 'Airflow', 'CI/CD', 'MLflow', 'DVC', 'LLMOps'],
-  'Cloud & Data': ['AWS', 'PostgreSQL', 'Spark', 'Hadoop', 'Azure', 'GCP', 'MongoDB', 'Redis', 'Cassandra'],
+  'DevOps': ['Git', 'Docker', 'Airflow', 'CI/CD', 'DVC', 'LLMOps'],
+  'Cloud & Data': ['AWS', 'PostgreSQL', 'Spark', 'Hadoop', 'GCP', 'MongoDB', 'Redis', 'Cassandra'],
 };

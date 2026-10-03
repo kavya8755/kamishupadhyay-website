@@ -1,6 +1,8 @@
 # kamishupadhyay.com
 
-Personal site for Kamish Upadhyay — Senior GenAI / AI Architect.
+Personal site for Kamish Upadhyay — Senior GenAI / AI Architect, styled as a
+terminal window (dark green-screen by default, light mode via the toggle, and a
+working prompt: `help`, `ls`, `cd`, `cat ~/.social`, `open resume`).
 
 ## What's on the site
 
@@ -47,7 +49,10 @@ Requires Node 22.12+ (Astro 7).
 - **Add a mini course**: drop the `.pptx` into `public/courses/`, then add an
   entry to the `courses` array in `src/data/courses.ts`.
 
-- **Update your bio, email, or social links**: edit `src/data/site.ts`.
+- **Update your bio, email, social links, or nav pages**: edit `src/data/site.ts`
+  (`PAGES` controls the directory nav, the home page listing, and the prompt's `ls`/`cd`).
+
+- **Change the theme colors**: edit the tokens at the top of `src/styles/global.css`.
 
 - **Update your experience/skills**: edit `src/data/experience.ts`.
 

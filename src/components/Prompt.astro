@@ -1,0 +1,200 @@
+---
+// Interactive shell prompt at the bottom of every page: help, ls, cd, cat, open, echo, clear.
+import { SITE, PAGES } from '../data/site';
+
+interface Props {
+  cwd: string;
+}
+const { cwd } = Astro.props;
+
+const config = {
+  user: `${SITE.handle}@${SITE.host}`,
+  cwd,
+  pages: [{ href: '/', dir: '~', note: 'home' }, ...PAGES],
+  social: [
+    { label: 'LinkedIn', href: SITE.linkedin },
+    { label: 'GitHub', href: SITE.github },
+    { label: 'Hugging Face', href: SITE.huggingface },
+    { label: 'Email', href: `mailto:${SITE.email}` },
+    { label: 'RSS', href: '/rss.xml' },
+  ],
+  resume: SITE.resumeHref,
+  whoami: `${SITE.name} — ${SITE.role}, ${SITE.years} · ${SITE.location} · ${SITE.relocation}`,
+};
+---
+<section class="repl" aria-label="Interactive terminal">
+  <div class="repl-out" aria-live="polite"></div>
+  <form class="repl-line" autocomplete="off">
+    <label class="prompt" for="repl-input">{config.user}:{cwd}$</label>
+    <input
+      id="repl-input"
+      type="text"
+      spellcheck="false"
+      autocapitalize="off"
+      placeholder="type help"
+      aria-label="Terminal command, type help for options"
+      data-config={JSON.stringify(config)}
+    />
+  </form>
+</section>
+
+<script>
+  type Page = { href: string; dir: string; note: string };
+  type Link = { label: string; href: string };
+  type Config = {
+    user: string;
+    cwd: string;
+    pages: Page[];
+    social: Link[];
+    resume: string;
+    whoami: string;
+  };
+
+  const input = document.getElementById('repl-input') as HTMLInputElement | null;
+  const form = input?.closest('form');
+  const out = form?.parentElement?.querySelector('.repl-out');
+
+  if (input && form && out) {
+    const cfg: Config = JSON.parse(input.dataset.config || '{}');
+    const history: string[] = [];
+    let hIndex = 0;
+
+    const line = (cls = '') => {
+      const div = document.createElement('div');
+      if (cls) div.className = cls;
+      out.appendChild(div);
+      return div;
+    };
+    const say = (text: string, cls = '') => {
+      line(cls).textContent = text;
+    };
+    const links = (items: Link[]) => {
+      const div = line();
+      items.forEach((it, i) => {
+        if (i) div.append('  ·  ');
+        const a = document.createElement('a');
+        a.href = it.href;
+        a.textContent = it.label;
+        if (/^https?:/.test(it.href)) {
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+        }
+        div.appendChild(a);
+      });
+    };
+
+    const findPage = (arg: string) => {
+      const name = arg.toLowerCase().replace(/^~\/?/, '').replace(/\/+$/, '');
+      if (name === '' || name === '~' || name === 'home') return cfg.pages[0];
+      if (name === '..') return cfg.pages[0];
+      return cfg.pages.find((p) => {
+        const dir = p.dir.replace(/\/$/, '');
+        return dir === name || p.href.replace(/\//g, '') === name || (name === 'courses' && dir === 'mini-courses');
+      });
+    };
+
+    const run = (raw: string) => {
+      const echo = line();
+      const p = document.createElement('span');
+      p.className = 'prompt';
+      p.textContent = `${cfg.user}:${cfg.cwd}$ `;
+      const c = document.createElement('span');
+      c.className = 'cmd';
+      c.textContent = raw;
+      echo.append(p, c);
+
+      const [cmd = '', ...args] = raw.trim().split(/\s+/);
+      const arg = args.join(' ');
+      switch (cmd.toLowerCase()) {
+        case '':
+          break;
+        case 'help':
+          say('  help            show this list');
+          say('  ls              list pages');
+          say('  cd <page>       go to a page, e.g. cd mini-courses');
+          say('  cat ~/.social   show social links');
+          say('  open resume     download my résumé');
+          say('  whoami          who is this');
+          say('  echo <text>     print text');
+          say('  clear           clear the screen');
+          break;
+        case 'ls':
+          cfg.pages.slice(1).forEach((pg) => {
+            const div = line();
+            const a = document.createElement('a');
+            a.href = pg.href;
+            a.textContent = pg.dir;
+            const note = document.createElement('span');
+            note.className = 'hint';
+            note.textContent = `  ${pg.note}`;
+            div.append('📂 ', a, note);
+          });
+          break;
+        case 'cd': {
+          if (!arg) {
+            say('cd: missing argument. Try: cd work', 'err');
+            break;
+          }
+          const pg = findPage(arg);
+          if (!pg) {
+            say(`cd: no such directory: ${arg}`, 'err');
+            break;
+          }
+          say(`Navigating to ${pg.dir}…`, 'hint');
+          window.location.href = pg.href;
+          break;
+        }
+        case 'cat':
+          if (arg === '~/.social' || arg === '.social') links(cfg.social);
+          else if (/resume/i.test(arg)) {
+            say('Binary file. Try: open resume', 'hint');
+          } else say(`cat: ${arg || '(no file specified)'}: No such file or directory`, 'err');
+          break;
+        case 'open':
+          if (/resume|cv/i.test(arg)) {
+            say('Opening résumé…', 'hint');
+            window.open(cfg.resume, '_blank', 'noopener');
+          } else say(`open: ${arg || '(nothing)'}: not found. Try: open resume`, 'err');
+          break;
+        case 'whoami':
+          say(cfg.whoami);
+          break;
+        case 'echo':
+          say(arg);
+          break;
+        case 'clear':
+          out.replaceChildren();
+          break;
+        case 'sudo':
+          say('Nice try. 🙂', 'hint');
+          break;
+        default:
+          say(`command not found: ${cmd}. Type help for options.`, 'err');
+      }
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = input.value;
+      if (value.trim()) history.push(value);
+      hIndex = history.length;
+      input.value = '';
+      run(value);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp' && hIndex > 0) {
+        hIndex -= 1;
+        input.value = history[hIndex];
+        e.preventDefault();
+      } else if (e.key === 'ArrowDown') {
+        hIndex = Math.min(history.length, hIndex + 1);
+        input.value = history[hIndex] ?? '';
+        e.preventDefault();
+      } else if (e.key === 'l' && e.ctrlKey) {
+        out.replaceChildren();
+        e.preventDefault();
+      }
+    });
+  }
+</script>

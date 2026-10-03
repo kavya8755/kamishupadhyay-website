@@ -13,16 +13,16 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 ---
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} cmd={`less ${post.id}.md`} description={post.data.description}>
   <article class="prose">
-    <p class="meta" style="margin-bottom: 4px;">
+    <p class="meta" style="margin-bottom: 2px;">
       {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
     <h1>{post.data.title}</h1>
-    <div>
+    <div style="margin-bottom: 14px;">
       {post.data.tags.map((t: string) => <span class="tag">{t}</span>)}
     </div>
     <Content />
   </article>
-  <p><a href="/blog/">&larr; Back to all posts</a></p>
+  <p style="margin-top: 18px;"><a href="/blog/">cd ..</a> <span class="muted">(back to all posts)</span></p>
 </BaseLayout>

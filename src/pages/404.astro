@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Page not found">
-  <h1>Page not found</h1>
-  <p>The page you're looking for doesn't exist.</p>
-  <p><a href="/">&larr; Back to home</a></p>
+<BaseLayout title="Page not found" cmd="cd ./this-page">
+  <h1 class="sr-only">Page not found</h1>
+  <p style="color: var(--error);">bash: cd: ./this-page: No such file or directory</p>
+  <p class="soft">The page you're looking for doesn't exist. Try <span class="cmd">ls</span> in the prompt below, or <a href="/">cd ~</a>.</p>
 </BaseLayout>
