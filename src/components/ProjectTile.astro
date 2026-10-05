@@ -1,0 +1,31 @@
+---
+import Photo from './Photo.astro';
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  /** Spans the full grid width with a wider image. */
+  full?: boolean;
+  class?: string;
+}
+const { project: p, full = false, class: cls = '' } = Astro.props;
+---
+<a
+  class:list={['tile', { 'tile-dark': p.dark, 'tile-full': full }, cls]}
+  href={`/projects/${p.slug}/`}
+>
+  <div class="tile-body">
+    <span class="eyebrow">{p.company}</span>
+    <h3 class={full ? 'headline' : 'headline-sm'}>{p.title}</h3>
+    <p class="subhead">{p.tagline}</p>
+    <div class="tile-metrics">
+      {p.metrics.slice(0, full ? 3 : 2).map((m) => (
+        <span><strong>{m.value}</strong>{m.label}</span>
+      ))}
+    </div>
+    <span class="more">Learn more</span>
+  </div>
+  <div class="tile-media">
+    <Photo name={p.image} sizes={full ? '(max-width: 734px) 100vw, 1000px' : '(max-width: 734px) 100vw, 500px'} />
+  </div>
+</a>

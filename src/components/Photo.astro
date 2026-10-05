@@ -1,0 +1,31 @@
+---
+// Responsive photo by key from src/data/images.ts. Astro resizes it at build
+// time and serves WebP at the widths below.
+import { Image } from 'astro:assets';
+import { IMAGES, type ImageKey } from '../data/images';
+
+interface Props {
+  name: ImageKey;
+  /** CSS sizes hint, e.g. "(max-width: 734px) 100vw, 50vw". */
+  sizes?: string;
+  class?: string;
+  /** Use "eager" only for the first, above-the-fold image. */
+  loading?: 'lazy' | 'eager';
+  /** Override the default alt text (pass "" for decorative use). */
+  alt?: string;
+}
+
+const { name, sizes = '(max-width: 734px) 100vw, 980px', class: cls, loading = 'lazy', alt } = Astro.props;
+const photo = IMAGES[name];
+---
+<Image
+  src={photo.src}
+  alt={alt ?? photo.alt}
+  widths={[480, 800, 1200, 1600, 2000].filter((w) => w <= photo.src.width)}
+  sizes={sizes}
+  format="webp"
+  quality={72}
+  loading={loading}
+  fetchpriority={loading === 'eager' ? 'high' : undefined}
+  class={cls}
+/>

@@ -2,9 +2,6 @@
 // Edit this file to update contact links or the tagline site-wide.
 export const SITE = {
   name: 'Kamish Upadhyay',
-  // Shown in the terminal title bar and prompt: `${handle}@${host}`.
-  handle: 'kamish',
-  host: 'blr',
   role: 'Senior GenAI / AI Architect',
   years: '9 years',
   tagline:
@@ -17,14 +14,15 @@ export const SITE = {
   huggingface: 'https://huggingface.co/1000kavya',
   resumeHref: '/resume/Resume_Kamish_9Yrs_GenAI.pdf',
   description:
-    'Personal site of Kamish Upadhyay, Senior GenAI / AI Architect with 9 years building LLM, RAG, and agentic AI systems for enterprise and financial services.',
+    'Kamish Upadhyay, Senior GenAI / AI Architect with 9 years building production LLM, RAG, voice and agentic AI systems for banks and enterprises.',
 };
 
-// Top-level pages, in nav order. `dir` is how each page appears in the terminal.
+// Top-level pages, in nav order.
 export const PAGES = [
-  { href: '/work/', dir: 'work/', label: 'Work', note: 'experience, skills, awards' },
-  { href: '/books/', dir: 'books/', label: 'Books', note: '3 free technical books' },
-  { href: '/courses/', dir: 'mini-courses/', label: 'Mini Courses', note: '6 slide-deck courses' },
-  { href: '/blog/', dir: 'blog/', label: 'Blog', note: 'notes on GenAI in production' },
-  { href: '/contact/', dir: 'contact/', label: 'Contact', note: 'email, LinkedIn, GitHub' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/work/', label: 'Experience' },
+  { href: '/blog/', label: 'Writing' },
+  { href: '/books/', label: 'Books' },
+  { href: '/courses/', label: 'Mini Courses' },
+  { href: '/contact/', label: 'Contact' },
 ];

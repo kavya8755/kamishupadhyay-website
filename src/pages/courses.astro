@@ -1,21 +1,42 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Photo from '../components/Photo.astro';
 import { courses } from '../data/courses';
 ---
-<BaseLayout title="Mini Courses" cmd="ls -l ~/mini-courses/" description="Free slide-deck mini courses by Kamish Upadhyay on agentic RAG, AI storage, agentic frameworks, MCP, LLM evaluation, and fine-tuning.">
-  <h1>Mini Courses</h1>
-  <p class="soft">Short, practical slide decks on building production GenAI systems. Free to download and use for learning or team sessions.</p>
-
-  {courses.map((course, i) => (
-    <div class="entry" id={course.slug}>
-      <p class="meta" style="margin: 0;">course {String(i + 1).padStart(2, '0')} · {course.slides} slides · .pptx</p>
-      <h3>📊 {course.title}</h3>
-      <p class="soft" style="margin-bottom: 6px;">{course.subtitle}</p>
-      <p class="meta" style="margin-bottom: 6px;">for: {course.audience}</p>
-      <div style="margin-bottom: 6px;">
-        {course.topics.map((t) => <span class="tag">{t}</span>)}
-      </div>
-      <a class="btn" href={course.file} download>download slides</a>
+<BaseLayout title="Mini Courses" description="Free slide-deck mini courses by Kamish Upadhyay on agentic RAG, AI storage, agentic frameworks, MCP, LLM evaluation, and fine-tuning.">
+  <section class="hero" style="padding-bottom: 60px;">
+    <div class="container">
+      <h1 class="headline-hero reveal">Mini Courses.</h1>
+      <p class="subhead reveal reveal-delay-1">
+        Short, practical slide decks on building production GenAI systems. Free to download
+        and use for learning or team sessions.
+      </p>
     </div>
-  ))}
+  </section>
+
+  <section class="section section-alt" style="padding-top: 60px;">
+    <div class="container-wide">
+      <div class="tiles">
+        {courses.map((course, i) => (
+          <article class:list={['tile reveal', `reveal-delay-${i % 2}`, { 'tile-dark': i % 3 === 0 }]} id={course.slug}>
+            <div class="tile-body">
+              <span class="eyebrow">Course {String(i + 1).padStart(2, '0')} · {course.slides} slides</span>
+              <h2 class="headline-sm">{course.title}</h2>
+              <p class="subhead">{course.subtitle}</p>
+              <p class="small muted" style="margin: 14px 0 0;">For {course.audience.charAt(0).toLowerCase() + course.audience.slice(1)}</p>
+              <ul class="chips" style="justify-content: center; margin-top: 16px;">
+                {course.topics.map((t) => <li style={i % 3 === 0 ? 'background: #2a2a2c; color: #f5f5f7;' : ''}>{t}</li>)}
+              </ul>
+              <div class="btn-row" style="margin-top: 22px;">
+                <a class="btn" href={course.file} download>Download slides</a>
+              </div>
+            </div>
+            <div class="tile-media">
+              <Photo name={course.image} alt="" sizes="(max-width: 734px) 100vw, 500px" />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 </BaseLayout>

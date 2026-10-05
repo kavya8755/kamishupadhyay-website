@@ -1,6 +1,9 @@
 // Add a new mini course by adding an object here and dropping the .pptx in /public/courses/.
 // No other code changes needed — the courses page reads from this list.
+import type { ImageKey } from './images';
+
 export type Course = {
+  image: ImageKey;
   slug: string;
   title: string;
   subtitle: string;
@@ -13,6 +16,7 @@ export type Course = {
 export const courses: Course[] = [
   {
     slug: 'agentic-rag',
+    image: 'neural-ring',
     title: 'Agentic RAG: From Retrieval to Reasoning',
     subtitle: 'Design retrieval systems that plan, route, check their own evidence, and cite sources.',
     audience: 'ML engineers and architects who already know basic RAG',
@@ -22,6 +26,7 @@ export const courses: Course[] = [
   },
   {
     slug: 'storage-selection-for-ai',
+    image: 'datacenter',
     title: 'Storage Selection for AI Solutions',
     subtitle: 'Choose vector, relational, graph, cache and object storage for real workloads.',
     audience: 'Architects and engineering leads designing GenAI platforms',
@@ -31,6 +36,7 @@ export const courses: Course[] = [
   },
   {
     slug: 'agentic-frameworks-explained',
+    image: 'robot-dog',
     title: 'Agentic Frameworks Explained: CrewAI, LangGraph, AutoGen & More',
     subtitle: 'How the major agent frameworks think, where each one fits, and how to choose.',
     audience: 'Engineers choosing a stack for multi-agent systems',
@@ -40,6 +46,7 @@ export const courses: Course[] = [
   },
   {
     slug: 'mcp-model-context-protocol',
+    image: 'fiber',
     title: 'MCP: Model Context Protocol for Tool-Using Agents',
     subtitle: 'The open standard for connecting LLM apps to tools and data: architecture, build, and security.',
     audience: 'Engineers integrating agents with enterprise systems',
@@ -49,6 +56,7 @@ export const courses: Course[] = [
   },
   {
     slug: 'llm-evaluation-and-guardrails',
+    image: 'lab',
     title: 'LLM Evaluation & Guardrails for Production',
     subtitle: 'Measure quality, catch regressions before release, and keep models safe in production.',
     audience: 'Teams taking LLM features from demo to production',
@@ -58,6 +66,7 @@ export const courses: Course[] = [
   },
   {
     slug: 'fine-tuning-lora-qlora',
+    image: 'gpu-stack',
     title: 'Fine-Tuning LLMs with LoRA & QLoRA',
     subtitle: 'When to fine-tune, how parameter-efficient methods work, and how to ship adapters.',
     audience: 'ML engineers adapting open models to domain tasks',

@@ -10,6 +10,8 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    // Key from src/data/images.ts, used as the post's cover photo.
+    image: z.string().optional(),
   }),
 });
 

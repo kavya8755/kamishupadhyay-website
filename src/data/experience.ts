@@ -14,9 +14,9 @@ export const experience: Role[] = [
     period: 'Aug 2025 – Present',
     location: 'Bengaluru, IN',
     bullets: [
-      'Fraudulent money-mule networks were causing significant losses and needed faster, explainable investigation.',
-      'Architected an end-to-end XGBoost + graph analytics + GigaChat SLM fraud platform with real-time scoring, SHAP explainability, cost-based thresholding, and an investigation agent.',
-      'Achieved 99.5% PR-AUC, 100% recovery of simulated fraud rings, 4.25ms latency, and an 82% reduction in fraud losses versus the baseline.',
+      'Fraud detection: led a team to architect a real-time fraud platform for money-mule detection, combining XGBoost, graph analytics and a GigaChat SLM investigation agent with SHAP explainability. It reached 93.5% PR-AUC at 4.25 ms latency and cut fraud losses by 76% compared with the baseline.',
+      'RAG knowledge platform: led a team to build a RAG-based AI assistant for 500+ employees across HR, IT and operations. It handles about 65% of queries without a human, cut response time from hours to seconds and saved 3 FTE.',
+      'Voice agent: led a team to build a production STT → LLM → TTS banking voice agent on Sber Platform V, with fine-tuned GigaChat 2 MAX, guardrails and a CI quality gate. It cut ASR WER from 46% to 22%, reached 92% intent accuracy and ran at 1.8 s p95 latency and ₹0.48 per turn.',
     ],
   },
   {
@@ -25,9 +25,7 @@ export const experience: Role[] = [
     period: 'Apr 2024 – Jul 2025',
     location: 'Bengaluru, IN',
     bullets: [
-      'Architected an enterprise agentic AI analytics platform for natural-language analysis of sales, inventory, and logistics data.',
-      'Designed an LLM orchestration and tool-calling framework for intent understanding, Text-to-SQL generation and validation, enterprise data retrieval, and dynamic Python-based visualization.',
-      'Enabled end-to-end conversational decision intelligence for sales trends and comparisons, product performance, inventory issues, and logistics bottlenecks.',
+      'Built an agentic AI analytics platform with LLM tool-calling, validated Text-to-SQL (about 88% execution accuracy) and auto-generated charts, so 300+ users could analyze sales, inventory and logistics data in plain language. It cut ad-hoc report requests by about 50% and turnaround from days to minutes.',
     ],
   },
   {
@@ -36,9 +34,7 @@ export const experience: Role[] = [
     period: 'Apr 2022 – Mar 2024',
     location: 'Bengaluru, IN',
     bullets: [
-      'Tasked with cutting manual effort in customer onboarding, designed an LLM-driven platform to automate document processing, KYC verification, and credit-risk assessment.',
-      'Built the pipeline in Python: Tesseract OCR with OpenCV preprocessing for document extraction, LLM-based field validation and GenAI case summarization, and an ML credit-risk model with SHAP explanations, protected by PII masking and human-in-the-loop review, and deployed on on-premise Linux servers through Jenkins CI/CD pipelines.',
-      'Delivered automated, auditable compliance workflows that made onboarding faster and more consistent while keeping sensitive customer data inside the bank\'s own infrastructure.',
+      'Built an LLM-driven onboarding platform that automates OCR-based document extraction, KYC checks and credit-risk scoring (0.87 AUC, with SHAP explanations), cutting turnaround from 3–5 days to under 24 hours and manual review by about 60%, with PII masking and on-premise Jenkins CI/CD.',
       'Developed a production predictive model for justifying Net Asset Value (NAV) in investment management using decision trees, RabbitMQ, Python, AWS S3, PostgreSQL, Airflow, Docker, and Kubernetes.',
     ],
   },

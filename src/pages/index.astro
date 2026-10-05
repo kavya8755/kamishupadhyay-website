@@ -1,84 +1,278 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE, PAGES } from '../data/site';
+import Photo from '../components/Photo.astro';
+import ProjectTile from '../components/ProjectTile.astro';
+import PostCard from '../components/PostCard.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../data/site';
+import { projects, featured } from '../data/projects';
+import { experience } from '../data/experience';
+import { linkedinPosts } from '../data/linkedin';
 import { getCollection } from 'astro:content';
+import type { ImageKey } from '../data/images';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 
-const banner = `
-██╗  ██╗ █████╗ ███╗   ███╗██╗███████╗██╗  ██╗
-██║ ██╔╝██╔══██╗████╗ ████║██║██╔════╝██║  ██║
-█████╔╝ ███████║██╔████╔██║██║███████╗███████║
-██╔═██╗ ██╔══██║██║╚██╔╝██║██║╚════██║██╔══██║
-██║  ██╗██║  ██║██║ ╚═╝ ██║██║███████║██║  ██║
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚══════╝╚═╝  ╚═╝`;
+const [lead, ...rest] = featured;
 
-const highlights = [
-  'Real-time fraud platform for money-mule networks (XGBoost + graph analytics + GigaChat SLM + investigation agent): 99.5% PR-AUC, 4.25ms latency, 82% lower fraud losses.',
-  'Enterprise agentic AI analytics platform with LLM tool-calling and Text-to-SQL: conversational decision intelligence over sales, inventory and logistics data.',
-  'LLM-driven KYC onboarding: OCR + LLM field validation, GenAI case summaries and an explainable credit-risk model, kept on the bank\'s own infrastructure.',
+const stats = [
+  { value: '93.5%', label: 'PR-AUC on real-time fraud detection' },
+  { value: '76%', label: 'lower fraud losses vs. baseline' },
+  { value: '500+', label: 'employees served by a RAG assistant' },
+  { value: '92%', label: 'intent accuracy in a production voice agent' },
+];
+
+const gallery: { kicker: string; title: string; href: string; image: ImageKey }[] = [
+  { kicker: 'Experience', title: '9 years across research, consulting and banking.', href: '/work/', image: 'lab' },
+  { kicker: 'Projects', title: `${projects.length} case studies, from fraud to voice AI.`, href: '/projects/', image: 'robot-arm' },
+  { kicker: 'Writing', title: 'Field notes on shipping GenAI.', href: '/blog/', image: 'laptop-desk' },
+  { kicker: 'Books', title: 'Three free technical books.', href: '/books/', image: 'quantum-rings' },
+  { kicker: 'Mini Courses', title: 'Six slide-deck courses, free to use.', href: '/courses/', image: 'robot-dog' },
+  { kicker: 'Recognition', title: 'CTO Appreciation Award, 2026.', href: '/work/#recognition', image: 'gpu-stack' },
+];
+
+const expertise = [
+  {
+    title: 'LLMs & fine-tuning',
+    body: 'SFT, PEFT, LoRA and QLoRA; prompt and context engineering; response and inference optimisation with vLLM.',
+    icon: 'M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3zM18 15l.9 2.1L21 18l-2.1.9L18 21l-.9-2.1L15 18l2.1-.9L18 15z',
+  },
+  {
+    title: 'Agentic AI & MCP',
+    body: 'LangGraph and tool-calling orchestration, investigation agents, and MCP-based tool integration.',
+    icon: 'M6 6m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M18 6m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M12 18m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M8.2 7.5l2.6 8.2M15.8 7.5l-2.6 8.2M8.5 6h7',
+  },
+  {
+    title: 'RAG & knowledge systems',
+    body: 'Retrieval-augmented assistants grounded in enterprise content, with a clear hand-off to people.',
+    icon: 'M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5A1.5 1.5 0 0 1 4 17.5v-12zM13 4h5.5c.8 0 1.5.7 1.5 1.5V12M13 4v8M17 15.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0M19 17.5l2 2',
+  },
+  {
+    title: 'Voice AI',
+    body: 'Production STT → LLM → TTS pipelines with guardrails, latency budgets and cost per turn.',
+    icon: 'M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2',
+  },
+  {
+    title: 'Explainable ML',
+    body: 'XGBoost, graph analytics and SHAP: models that risk and compliance teams can audit.',
+    icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2',
+  },
+  {
+    title: 'MLOps & LLMOps',
+    body: 'CI quality gates, Airflow, Docker, Kubernetes, DVC and on-premise CI/CD for regulated data.',
+    icon: 'M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7zM12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1',
+  },
 ];
 ---
 <BaseLayout title={SITE.name}>
-  <h1 class="sr-only">{SITE.name}, {SITE.role}</h1>
-  <pre class="banner" aria-hidden="true">{banner}</pre>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow reveal">{SITE.role}</span>
+      <h1 class="headline-hero reveal">{SITE.name}</h1>
+      <p class="headline-md gradient-text reveal reveal-delay-1" style="margin-top: 14px;">Production AI for banks and enterprises.</p>
+      <p class="subhead reveal reveal-delay-2">
+        {SITE.years} designing LLM, RAG, voice and agentic AI systems, from the first architecture
+        sketch to monitored production. Based in {SITE.location}. {SITE.relocation}.
+      </p>
+      <div class="btn-row reveal reveal-delay-2">
+        <a class="btn" href="/projects/">Explore the work</a>
+        <a class="btn btn-outline" href={SITE.resumeHref}>Download résumé</a>
+      </div>
+    </div>
+    <div class="container-wide">
+      <div class="hero-media reveal reveal-delay-3">
+        <Photo name="neural-ring" loading="eager" sizes="(max-width: 734px) 100vw, 1100px" />
+      </div>
+    </div>
+  </section>
 
-  <p>
-    <span class="prompt">$</span> <span class="cmd">echo $ROLE</span><br />
-    <strong>"{SITE.role} · {SITE.years}"</strong>
-  </p>
-
-  <h2>cat /proc/status</h2>
-  <ul class="arrows indent">
-    <li>Currently: Gen AI Architect at SBER Bank India, building a real-time, explainable fraud-detection platform</li>
-    <li>
-      Previously:
-      <ul class="tree">
-        <li>Lead AI Engineer at EY (agentic AI analytics, Text-to-SQL)</li>
-        <li>Senior Data Scientist at Société Générale (LLM-driven KYC onboarding)</li>
-        <li>Applied ML Engineer at TCS Research (NLP chatbots, Spark/Hadoop ML)</li>
-        <li>Applied ML Engineer at GateOverflow (NLP sentiment analysis)</li>
-      </ul>
-    </li>
-    <li>Focus: {SITE.tagline}</li>
-    <li>Based in {SITE.location} · {SITE.relocation.toLowerCase()}</li>
-    <li>Résumé: <a href={SITE.resumeHref}>Resume_Kamish_9Yrs_GenAI.pdf</a></li>
-  </ul>
-
-  <h2>ls ~/pages/</h2>
-  <ul class="dirs indent">
-    {PAGES.map((p) => (
-      <li>📂 <a href={p.href}>{p.dir}</a> <span class="note">({p.note})</span></li>
-    ))}
-  </ul>
-
-  <h2>cat ~/highlights.txt</h2>
-  <ul class="dots indent">
-    {highlights.map((h) => <li>{h}</li>)}
-  </ul>
-
-  {posts.length > 0 && (
-    <>
-      <h2>ls -t ~/blog/ | head -3</h2>
-      <ul class="plain indent">
-        {posts.map((post) => (
-          <li>
-            <span class="muted">{post.data.pubDate.toISOString().slice(0, 10)}</span>{' '}
-            <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-          </li>
+  <!-- Results -->
+  <section class="section">
+    <div class="container center">
+      <h2 class="headline reveal">Results that reached production.</h2>
+      <p class="subhead reveal">Not prototypes. Systems people rely on every day.</p>
+      <div class="stats reveal">
+        {stats.map((s) => (
+          <div>
+            <span class="stat-value gradient-text">{s.value}</span>
+            <span class="stat-label">{s.label}</span>
+          </div>
         ))}
-      </ul>
-    </>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section section-alt" id="projects">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">Selected work.</h2>
+        <p class="subhead reveal">From money-mule networks to voice banking.</p>
+      </div>
+      <div class="tiles">
+        <ProjectTile project={lead} full class="reveal" />
+        {rest.map((p) => <ProjectTile project={p} class="reveal" />)}
+      </div>
+      <p class="center" style="margin-top: 40px; font-size: 21px;">
+        <a class="more" href="/projects/">See all {projects.length} projects</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Get to know -->
+  <section class="section" aria-labelledby="know">
+    <div class="container">
+      <h2 class="headline reveal" id="know">Get to know Kamish.</h2>
+    </div>
+    <div class="gallery-wrap reveal" data-gallery>
+      <div class="gallery" tabindex="0" aria-label="Highlights, scroll horizontally">
+        {gallery.map((g) => (
+          <a class="g-card" href={g.href}>
+            <Photo name={g.image} alt="" sizes="372px" />
+            <span class="g-card-text">
+              <span class="g-card-kicker">{g.kicker}</span>
+              <span class="g-card-title">{g.title}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+      <div class="paddles">
+        <button class="paddle" type="button" data-prev aria-label="Previous">
+          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+        <button class="paddle" type="button" data-next aria-label="Next">
+          <svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M2 2l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Expertise -->
+  <section class="section section-alt">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">What I bring.</h2>
+        <p class="subhead reveal">End-to-end ownership, from client requirement to deployment, monitoring and enhancement.</p>
+      </div>
+      <div class="tiles tiles-3">
+        {expertise.map((e, i) => (
+          <div class:list={['card reveal', `reveal-delay-${i % 3}`]}>
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d={e.icon} />
+            </svg>
+            <h3>{e.title}</h3>
+            <p>{e.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Career -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="center" style="margin-bottom: 40px;">
+        <h2 class="headline reveal">Nine years. Five teams.</h2>
+        <p class="subhead reveal">Research lab to global bank, always close to production.</p>
+      </div>
+      <div class="tiles reveal" style="gap: 16px;">
+        {experience.map((r) => (
+          <div class="card">
+            <span class="eyebrow" style="font-size: 14px; margin: 0;">{r.period}</span>
+            <h3 style="margin-top: 6px;">{r.title}</h3>
+            <p>{r.company} · {r.location}</p>
+          </div>
+        ))}
+        <a class="card" href="/work/" style="display: flex; align-items: center; justify-content: center; font-size: 21px;">
+          <span class="more">Full experience</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Writing -->
+  <section class="section">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">Latest writing.</h2>
+        <p class="subhead reveal">What I learn shipping AI, written down.</p>
+      </div>
+      <div class="tiles tiles-3">
+        {posts.map((post) => <div class="reveal"><PostCard post={post} /></div>)}
+      </div>
+      <p class="center" style="margin-top: 40px; font-size: 21px;"><a class="more" href="/blog/">Read all posts</a></p>
+    </div>
+  </section>
+
+  {linkedinPosts.length > 0 && (
+    <section class="section section-alt" id="linkedin">
+      <div class="container-wide">
+        <div class="center" style="margin-bottom: 48px;">
+          <h2 class="headline reveal">From LinkedIn.</h2>
+          <p class="subhead reveal">Recent posts and moments.</p>
+        </div>
+        <div class="tiles tiles-3">
+          {linkedinPosts.map((post) => (
+            <a class="post-card reveal" href={post.url} target="_blank" rel="noopener noreferrer">
+              {post.image && (
+                <Image src={post.image} alt={post.imageAlt ?? ''} widths={[480, 800]} sizes="(max-width: 734px) 100vw, 330px" format="webp" quality={72} />
+              )}
+              <div class="post-card-body">
+                <time datetime={post.date}>
+                  {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </time>
+                <p style="color: var(--text); font-size: 17px; margin-top: 8px;">{post.text}</p>
+                <span class="more" style="display: inline-block; margin-top: 12px; color: var(--link);">View on LinkedIn</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
   )}
 
-  <h2>cat ~/.social</h2>
-  <p class="indent">
-    <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a> ·{' '}
-    <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> ·{' '}
-    <a href={SITE.huggingface} target="_blank" rel="noopener noreferrer">Hugging Face</a> ·{' '}
-    <a href={`mailto:${SITE.email}`}>Email</a> ·{' '}
-    <a href="/rss.xml">RSS</a>
-  </p>
+  <!-- Learn -->
+  <section class="section section-alt">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">Learn with me. Free.</h2>
+        <p class="subhead reveal">Books and slide-deck courses for engineers and leaders.</p>
+      </div>
+      <div class="tiles">
+        <a class="tile tile-dark reveal" href="/books/">
+          <div class="tile-body">
+            <span class="eyebrow">Books</span>
+            <h3 class="headline-sm">Three technical books.</h3>
+            <p class="subhead">Agentic platforms, quantum computing for AI engineers, and AI leadership.</p>
+            <span class="more">Browse books</span>
+          </div>
+          <div class="tile-media"><Photo name="quantum-rings" alt="" sizes="(max-width: 734px) 100vw, 500px" /></div>
+        </a>
+        <a class="tile reveal reveal-delay-1" href="/courses/">
+          <div class="tile-body">
+            <span class="eyebrow">Mini Courses</span>
+            <h3 class="headline-sm">Six courses. Download and teach.</h3>
+            <p class="subhead">Agentic RAG, MCP, agent frameworks, evals, storage and fine-tuning.</p>
+            <span class="more">Browse courses</span>
+          </div>
+          <div class="tile-media"><Photo name="robot-dog" alt="" sizes="(max-width: 734px) 100vw, 500px" /></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section-dark center">
+    <div class="container">
+      <h2 class="headline reveal">Let’s build what’s next.</h2>
+      <p class="subhead reveal">Architecture reviews, GenAI strategy, or a full-time role. I’m {SITE.relocation.toLowerCase()}.</p>
+      <div class="btn-row reveal">
+        <a class="btn" href={`mailto:${SITE.email}`}>Email me</a>
+        <a class="btn btn-outline" href={SITE.linkedin} target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>

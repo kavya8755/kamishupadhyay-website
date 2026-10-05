@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectTile from '../../components/ProjectTile.astro';
+import { projects } from '../../data/projects';
+
+const [lead, ...rest] = projects;
+---
+<BaseLayout title="Projects" description="Case studies by Kamish Upadhyay: real-time fraud detection, a RAG knowledge assistant, a banking voice agent, agentic analytics, KYC automation and more.">
+  <section class="hero" style="padding-bottom: 60px;">
+    <div class="container">
+      <h1 class="headline-hero reveal">Projects.</h1>
+      <p class="subhead reveal reveal-delay-1">
+        Production AI across banking, consulting and research: what the problem was,
+        how it was built, and what changed.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" style="padding-top: 60px;">
+    <div class="container-wide">
+      <div class="tiles">
+        <ProjectTile project={lead} full class="reveal" />
+        {rest.map((p) => <ProjectTile project={p} class="reveal" />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

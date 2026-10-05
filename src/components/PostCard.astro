@@ -1,0 +1,22 @@
+---
+import Photo from './Photo.astro';
+import type { ImageKey } from '../data/images';
+import { IMAGES } from '../data/images';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const image = post.data.image && post.data.image in IMAGES ? (post.data.image as ImageKey) : 'laptop-desk';
+---
+<a class="post-card" href={`/blog/${post.id}/`}>
+  <Photo name={image} alt="" sizes="(max-width: 734px) 100vw, 330px" />
+  <div class="post-card-body">
+    <time datetime={post.data.pubDate.toISOString()}>
+      {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+    </time>
+    <h3>{post.data.title}</h3>
+    <p>{post.data.description}</p>
+  </div>
+</a>

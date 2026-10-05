@@ -1,6 +1,9 @@
 // Add a new book by adding an object here and dropping the PDF in /public/books/.
 // No other code changes needed — the books page reads from this list.
+import type { ImageKey } from './images';
+
 export type Book = {
+  image: ImageKey;
   slug: string;
   title: string;
   subtitle: string;
@@ -13,6 +16,7 @@ export type Book = {
 export const books: Book[] = [
   {
     slug: 'from-prototype-to-autonomous-enterprise',
+    image: 'robot-arm',
     title: 'From Prototype to Autonomous Enterprise',
     subtitle: 'Scaling AI Agents, Platforms, and Intelligent Workflows',
     description:
@@ -23,6 +27,7 @@ export const books: Book[] = [
   },
   {
     slug: 'quantum-computing-for-ai-engineers',
+    image: 'quantum-rings',
     title: 'Quantum Computing for AI Engineers',
     subtitle:
       'From Basic Principles to Quantum Machine Learning, Novel Neural Architectures, and Quantum-Safe Systems',
@@ -34,6 +39,7 @@ export const books: Book[] = [
   },
   {
     slug: 'the-ai-ceo',
+    image: 'robot-chess',
     title: 'The AI CEO',
     subtitle: 'How Leaders Build AI-First Organizations',
     description:

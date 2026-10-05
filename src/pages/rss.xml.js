@@ -7,7 +7,7 @@ export async function GET(context) {
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
   return rss({
-    title: `${SITE.name} — Blog`,
+    title: `${SITE.name} — Writing`,
     description: SITE.description,
     site: context.site,
     items: posts.map((post) => ({

@@ -3,6 +3,7 @@ title: "Why I'm Writing About Agentic AI, RAG, and MCP"
 description: "Starting this blog to document the architecture decisions, failure modes, and lessons behind the enterprise GenAI systems I build."
 pubDate: 2026-09-19
 tags: ["agentic-ai", "rag", "mcp"]
+image: "code-sublime"
 ---
 
 Most of what I've learned about building production LLM systems didn't come from a paper — it came from watching a RAG pipeline fall over under real traffic, or a multi-agent workflow lose state halfway through a long-running task, and having to figure out why.

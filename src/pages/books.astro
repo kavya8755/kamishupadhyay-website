@@ -1,18 +1,36 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Photo from '../components/Photo.astro';
 import { books } from '../data/books';
 ---
-<BaseLayout title="Books" cmd="ls -l ~/books/" description="Technical books by Kamish Upadhyay on agentic AI platforms, quantum computing for AI engineers, and AI leadership.">
-  <h1>Books</h1>
-  <p class="soft">Free to read and download.</p>
-
-  {books.map((book) => (
-    <div class="entry" id={book.slug}>
-      <h3>📕 {book.title}</h3>
-      <p class="meta" style="margin: 0 0 6px;">{book.edition} · {book.pages} pages</p>
-      <p class="soft" style="margin-bottom: 6px;">{book.subtitle}</p>
-      <p>{book.description}</p>
-      <a class="btn" href={book.file} download>download pdf</a>
+<BaseLayout title="Books" description="Free technical books by Kamish Upadhyay on agentic AI platforms, quantum computing for AI engineers, and AI leadership.">
+  <section class="hero" style="padding-bottom: 60px;">
+    <div class="container">
+      <h1 class="headline-hero reveal">Books.</h1>
+      <p class="subhead reveal reveal-delay-1">Free to read and download.</p>
     </div>
-  ))}
+  </section>
+
+  <section class="section section-alt" style="padding-top: 60px;">
+    <div class="container-wide">
+      <div class="tiles">
+        {books.map((book, i) => (
+          <article class:list={['tile reveal', { 'tile-dark': i % 2 === 0, 'tile-full': i === 0 }]} id={book.slug}>
+            <div class="tile-body">
+              <span class="eyebrow">{book.edition} · {book.pages} pages</span>
+              <h2 class={i === 0 ? 'headline' : 'headline-sm'}>{book.title}</h2>
+              <p class="subhead">{book.subtitle}</p>
+              <p class="muted" style="max-width: 640px; margin: 16px auto 0;">{book.description}</p>
+              <div class="btn-row" style="margin-top: 22px;">
+                <a class="btn" href={book.file} download>Download PDF</a>
+              </div>
+            </div>
+            <div class="tile-media">
+              <Photo name={book.image} alt="" sizes={i === 0 ? '(max-width: 734px) 100vw, 1000px' : '(max-width: 734px) 100vw, 500px'} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
 </BaseLayout>

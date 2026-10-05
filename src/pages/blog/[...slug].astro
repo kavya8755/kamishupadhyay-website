@@ -1,28 +1,64 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Photo from '../../components/Photo.astro';
+import PostCard from '../../components/PostCard.astro';
+import { IMAGES, type ImageKey } from '../../data/images';
+import { SITE } from '../../data/site';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, more: posts.filter((p) => p.id !== post.id).slice(0, 3) },
   }));
 }
 
-const { post } = Astro.props;
+const { post, more } = Astro.props;
 const { Content } = await render(post);
+const image = post.data.image && post.data.image in IMAGES ? (post.data.image as ImageKey) : null;
 ---
-<BaseLayout title={post.data.title} cmd={`less ${post.id}.md`} description={post.data.description}>
-  <article class="prose">
-    <p class="meta" style="margin-bottom: 2px;">
-      {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-    </p>
-    <h1>{post.data.title}</h1>
-    <div style="margin-bottom: 14px;">
-      {post.data.tags.map((t: string) => <span class="tag">{t}</span>)}
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article>
+    <header class="article-head">
+      <div class="container">
+        <span class="eyebrow reveal">
+          {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        </span>
+        <h1 class="headline reveal">{post.data.title}</h1>
+        <p class="subhead reveal reveal-delay-1">{post.data.description}</p>
+        <ul class="chips reveal reveal-delay-1" style="justify-content: center; margin-top: 22px;">
+          {post.data.tags.map((t: string) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </header>
+
+    {image && (
+      <div class="container-wide">
+        <div class="article-media reveal reveal-delay-2">
+          <Photo name={image} loading="eager" sizes="(max-width: 734px) 100vw, 1100px" />
+        </div>
+      </div>
+    )}
+
+    <div class="prose">
+      <Content />
+      <p class="muted" style="margin-top: 48px; font-size: 17px;">
+        — {SITE.name}, {SITE.role}. <a href="/contact/">Get in touch</a> if you’re building something similar.
+      </p>
     </div>
-    <Content />
   </article>
-  <p style="margin-top: 18px;"><a href="/blog/">cd ..</a> <span class="muted">(back to all posts)</span></p>
+
+  {more.length > 0 && (
+    <section class="section section-alt">
+      <div class="container-wide">
+        <h2 class="headline-md center reveal" style="margin-bottom: 40px;">Keep reading.</h2>
+        <div class="tiles tiles-3">
+          {more.map((p) => <div class="reveal"><PostCard post={p} /></div>)}
+        </div>
+      </div>
+    </section>
+  )}
 </BaseLayout>

@@ -1,21 +1,50 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../data/site';
----
-<BaseLayout title="Contact" cmd="cat ~/.social" description="Get in touch with Kamish Upadhyay.">
-  <h1>Contact</h1>
-  <p class="soft">
-    The fastest way to reach me is email or LinkedIn. For consulting, AI
-    advisory, or sourcing inquiries, a short note on scope and timeline helps
-    me reply faster.
-  </p>
 
-  <h2>channels</h2>
-  <div class="indent">
-    <p class="kv"><span class="k">email:</span> <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
-    <p class="kv"><span class="k">linkedin:</span> <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">{SITE.linkedin.replace('https://www.', '')}</a></p>
-    <p class="kv"><span class="k">github:</span> <a href={SITE.github} target="_blank" rel="noopener noreferrer">{SITE.github.replace('https://', '')}</a></p>
-    <p class="kv"><span class="k">huggingface:</span> <a href={SITE.huggingface} target="_blank" rel="noopener noreferrer">{SITE.huggingface.replace('https://', '')}</a></p>
-    <p class="kv"><span class="k">location:</span> {SITE.location} · {SITE.relocation.toLowerCase()}</p>
-  </div>
+const channels = [
+  { label: 'Email', value: SITE.email, href: `mailto:${SITE.email}`, note: 'The fastest way to reach me.' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/1000kavya', href: SITE.linkedin, note: 'Posts, updates and messages.' },
+  { label: 'GitHub', value: SITE.github.replace('https://', ''), href: SITE.github, note: 'Code and experiments.' },
+  { label: 'Hugging Face', value: SITE.huggingface.replace('https://', ''), href: SITE.huggingface, note: 'Models and spaces.' },
+];
+---
+<BaseLayout title="Contact" description="Get in touch with Kamish Upadhyay about GenAI architecture, advisory work or roles.">
+  <section class="hero" style="padding-bottom: 60px;">
+    <div class="container">
+      <h1 class="headline-hero reveal">Let’s talk.</h1>
+      <p class="subhead reveal reveal-delay-1">
+        For roles, consulting, AI advisory or sourcing, a short note on scope and timeline
+        helps me reply faster. {SITE.location} · {SITE.relocation}.
+      </p>
+      <div class="btn-row reveal reveal-delay-2">
+        <a class="btn" href={`mailto:${SITE.email}`}>Email me</a>
+        <a class="btn btn-outline" href={SITE.resumeHref}>Download résumé</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" style="padding-top: 60px;">
+    <div class="container">
+      <div class="tiles">
+        {channels.map((c, i) => {
+          const external = c.href.startsWith('http');
+          return (
+            <a
+              class:list={['tile reveal', `reveal-delay-${i % 2}`]}
+              href={c.href}
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noopener noreferrer' : undefined}
+            >
+              <div class="tile-body left">
+                <span class="eyebrow">{c.label}</span>
+                <h2 class="headline-sm" style="word-break: break-word;">{c.value}</h2>
+                <p class="muted" style="margin: 0;">{c.note}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 </BaseLayout>

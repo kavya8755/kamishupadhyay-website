@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Photo from '../../components/Photo.astro';
+import { projects, type Project } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+const { project: p, next } = Astro.props;
+---
+<BaseLayout title={p.title} description={`${p.tagline} ${p.company}, ${p.period}.`}>
+  <header class="article-head">
+    <div class="container">
+      <span class="eyebrow reveal">{p.company} · {p.period}</span>
+      <h1 class="headline-hero reveal" style="margin: 6px auto 18px; max-width: 900px;">{p.title}</h1>
+      <p class="subhead reveal reveal-delay-1" style="max-width: 760px; margin: 0 auto;">{p.tagline}</p>
+      <p class="small muted reveal reveal-delay-1" style="margin-top: 18px;">{p.role}</p>
+    </div>
+  </header>
+
+  <div class="container-wide">
+    <div class="article-media reveal reveal-delay-2">
+      <Photo name={p.image} loading="eager" sizes="(max-width: 734px) 100vw, 1100px" />
+    </div>
+  </div>
+
+  <!-- Results at a glance -->
+  <section class="section-tight">
+    <div class="container center">
+      <div class:list={['stats', { 'stats-3': p.metrics.length === 3 }]} style="margin-top: 0;">
+        {p.metrics.map((m) => (
+          <div class="reveal">
+            <span class="stat-value gradient-text">{m.value}</span>
+            <span class="stat-label">{m.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Challenge -->
+  <section class="section" style="padding-top: 40px;">
+    <div class="container">
+      <span class="eyebrow reveal">The challenge</span>
+      <p class="lead reveal" style="font-size: clamp(24px, 3vw, 40px); line-height: 1.15; color: var(--text); max-width: 900px;">
+        {p.challenge}
+      </p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section section-alt">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">How it works.</h2>
+      </div>
+      <div class="steps">
+        {p.approach.map((s, i) => (
+          <div class:list={['step reveal', `reveal-delay-${i % 2}`]}>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Outcome -->
+  <section class="section section-dark">
+    <div class="container center">
+      <span class="eyebrow reveal">The outcome</span>
+      <p class="headline-md reveal" style="max-width: 900px; margin: 10px auto 0;">{p.outcome}</p>
+    </div>
+  </section>
+
+  <!-- Role & stack -->
+  <section class="section">
+    <div class="container">
+      <div class="tiles" style="gap: 20px;">
+        <div class="card reveal">
+          <h2 class="headline-sm">My role</h2>
+          <ul style="margin: 12px 0 0; padding-left: 1.1em; color: var(--text-2);">
+            {p.ownership.map((o) => <li style="margin-bottom: 8px;">{o}</li>)}
+          </ul>
+        </div>
+        <div class="card reveal reveal-delay-1">
+          <h2 class="headline-sm">Stack</h2>
+          <ul class="chips" style="margin-top: 16px;">
+            {p.stack.map((s) => <li style="background: var(--bg);">{s}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Next -->
+  <section class="section section-alt" style="padding: 70px 0;">
+    <div class="container center">
+      <span class="eyebrow">Next project</span>
+      <a class="headline-md" href={`/projects/${next.slug}/`} style="display: inline-block; color: var(--text);">{next.title} <span style="color: var(--link);">›</span></a>
+      <p class="btn-row" style="margin-top: 20px;">
+        <a class="btn btn-outline btn-sm" href="/projects/">All projects</a>
+        <a class="btn btn-sm" href="/contact/">Discuss a similar project</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

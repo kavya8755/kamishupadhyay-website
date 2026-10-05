@@ -1,8 +1,8 @@
 # kamishupadhyay.com
 
-Personal site for Kamish Upadhyay — Senior GenAI / AI Architect, styled as a
-terminal window (dark green-screen by default, light mode via the toggle, and a
-working prompt: `help`, `ls`, `cd`, `cat ~/.social`, `open resume`).
+Personal site for Kamish Upadhyay — Senior GenAI / AI Architect, designed in the
+style of apple.com: SF Pro / Inter type, frosted sticky nav, #f5f5f7 tiles,
+pill buttons, a scrolling card gallery and fade-in-on-scroll.
 
 ## What's on the site
 
@@ -49,10 +49,21 @@ Requires Node 22.12+ (Astro 7).
 - **Add a mini course**: drop the `.pptx` into `public/courses/`, then add an
   entry to the `courses` array in `src/data/courses.ts`.
 
-- **Update your bio, email, social links, or nav pages**: edit `src/data/site.ts`
-  (`PAGES` controls the directory nav, the home page listing, and the prompt's `ls`/`cd`).
+- **Edit a project case study**: `src/data/projects.ts` (each entry becomes
+  `/projects/<slug>/`). Keep metrics in sync with the résumé.
 
-- **Change the theme colors**: edit the tokens at the top of `src/styles/global.css`.
+- **Add or change a photo**: put it in `src/assets/images/`, register it in
+  `src/data/images.ts`, then reference its key (projects, books, courses, and the
+  `image:` field in blog front matter). Astro converts photos to responsive WebP.
+
+- **Feature a LinkedIn post**: save the post's photo to `src/assets/images/linkedin/`
+  and add an entry in `src/data/linkedin.ts`. The home page section appears
+  automatically once there is at least one post.
+
+- **Update your bio, email, social links, or nav pages**: edit `src/data/site.ts`
+  (`PAGES` controls the top navigation).
+
+- **Change the design tokens** (colors, radii, type): top of `src/styles/global.css`.
 
 - **Update your experience/skills**: edit `src/data/experience.ts`.
 

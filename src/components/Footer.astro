@@ -1,7 +1,52 @@
 ---
 import { SITE } from '../data/site';
+import { projects } from '../data/projects';
 const year = new Date().getFullYear();
 ---
-<footer class="site-footer">
-  &copy; {year} {SITE.name} · <a href="/rss.xml">rss</a> · type <span class="soft">help</span> in the prompt to explore
+<footer class="gfooter">
+  <div class="container">
+    <p class="gfooter-note">
+      Metrics on this site are taken from production results described in my résumé.
+      Photography from <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a>.
+    </p>
+    <div class="gfooter-cols">
+      <div>
+        <h4>Projects</h4>
+        <ul>
+          {projects.slice(0, 5).map((p) => <li><a href={`/projects/${p.slug}/`}>{p.title}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="/work/">Experience</a></li>
+          <li><a href="/work/#skills">Skills</a></li>
+          <li><a href="/work/#recognition">Awards</a></li>
+          <li><a href={SITE.resumeHref}>Résumé (PDF)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/blog/">Writing</a></li>
+          <li><a href="/books/">Books</a></li>
+          <li><a href="/courses/">Mini Courses</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          <li><a href={SITE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href={SITE.huggingface} target="_blank" rel="noopener noreferrer">Hugging Face</a></li>
+          <li><a href={`mailto:${SITE.email}`}>Email</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="gfooter-legal">
+      <span>Copyright © {year} {SITE.name}. {SITE.location}.</span>
+      <span>{SITE.role} · {SITE.relocation}</span>
+    </div>
+  </div>
 </footer>

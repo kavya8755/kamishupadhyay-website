@@ -1,59 +1,134 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Photo from '../components/Photo.astro';
 import { experience, skills } from '../data/experience';
+import { projects } from '../data/projects';
 import { SITE } from '../data/site';
+
+const companyKey = (c: string) => c.toLowerCase().replace(/[^a-z]/g, '').slice(0, 6);
+const projectsFor = (company: string) => projects.filter((p) => companyKey(p.company) === companyKey(company));
+
+const recognition = [
+  { value: '2026', title: 'CTO Appreciation Award' },
+  { value: '2025', title: 'Best Employee Award' },
+  { value: '2025', title: 'Extraordinary Performance Award' },
+];
+const credentials = [
+  { title: 'Speaker', body: 'Open Machine Learning Conference, Bengaluru, 2024' },
+  { title: 'GATE qualified', body: '97.10 percentile' },
+  { title: 'Certified Machine Learning Expert', body: 'AppliedAI, 2018' },
+  { title: 'Certified Deep Reinforcement Learning Expert', body: 'Udemy, 2020' },
+];
 ---
-<BaseLayout title="Work" cmd="cat experience.log" description="Experience, skills, and consulting availability for Kamish Upadhyay, Senior GenAI / AI Architect.">
-  <h1>Work</h1>
-  <p class="soft">{SITE.years} across AI research, applied ML, and enterprise GenAI architecture in financial services. {SITE.relocation}.</p>
-  <div class="button-row">
-    <a class="btn" href={SITE.resumeHref}>download résumé</a>
-  </div>
-
-  <h2>experience</h2>
-  {experience.map((role) => (
-    <div class="entry">
-      <h3>{role.title} @ {role.company}</h3>
-      <p class="meta" style="margin: 0 0 6px;">{role.period} · {role.location}</p>
-      <ul class="arrows">
-        {role.bullets.map((b) => <li>{b}</li>)}
-      </ul>
+<BaseLayout title="Experience" description="Experience, skills, education and awards of Kamish Upadhyay, Senior GenAI / AI Architect with 9 years in AI.">
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow reveal">{SITE.years} · {SITE.location} · {SITE.relocation}</span>
+      <h1 class="headline-hero reveal">Experience.</h1>
+      <p class="subhead reveal reveal-delay-1">
+        Gen AI and LLM fine-tuning (SFT, PEFT, LoRA/QLoRA), prompt and context engineering, multi-turn
+        dialogue, RAG and agentic workflows, delivered responsibly, explainably and end to end.
+      </p>
+      <div class="btn-row reveal reveal-delay-2">
+        <a class="btn" href={SITE.resumeHref}>Download résumé</a>
+        <a class="btn btn-outline" href="/projects/">See the projects</a>
+      </div>
     </div>
-  ))}
+    <div class="container-wide">
+      <div class="hero-media reveal reveal-delay-3">
+        <Photo name="lab" loading="eager" sizes="(max-width: 734px) 100vw, 1100px" />
+      </div>
+    </div>
+  </section>
 
-  <h2>skills</h2>
-  <div class="indent">
-    {Object.entries(skills).map(([group, items]) => (
-      <p class="kv"><span class="k">{group}:</span> {items.join(', ')}</p>
-    ))}
-  </div>
+  <section class="section">
+    <div class="container">
+      <h2 class="headline reveal">Where I’ve worked.</h2>
+      <ol class="timeline">
+        {experience.map((r) => {
+          const related = projectsFor(r.company);
+          return (
+            <li class="reveal">
+              <div class="when">{r.period}<span>{r.location}</span></div>
+              <div>
+                <h3>{r.title}</h3>
+                <p class="company">{r.company}</p>
+                <ul>{r.bullets.map((b) => <li>{b}</li>)}</ul>
+                {related.length > 0 && (
+                  <p style="margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 6px 22px;">
+                    {related.map((p) => <a class="more" href={`/projects/${p.slug}/`}>{p.title}</a>)}
+                  </p>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  </section>
 
-  <h2>education</h2>
-  <ul class="arrows indent">
-    <li>B.Tech, Information Technology: Kamla Nehru Institute of Technology (KNIT), Sultanpur, IN (2014–2018)</li>
-  </ul>
+  <section class="section section-alt" id="skills">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">Skills.</h2>
+        <p class="subhead reveal">The toolkit behind the work.</p>
+      </div>
+      <div class="tiles tiles-3">
+        {Object.entries(skills).map(([group, items], i) => (
+          <div class:list={['card reveal', `reveal-delay-${i % 3}`]}>
+            <h3 style="margin-top: 0;">{group}</h3>
+            <ul class="chips" style="margin-top: 14px;">
+              {items.map((s) => <li style="background: var(--bg-alt);">{s}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <h2>certifications &amp; conferences</h2>
-  <ul class="arrows indent">
-    <li>Certified Machine Learning Expert, AppliedAI ('18)</li>
-    <li>GATE Qualified, 97.10 percentile</li>
-    <li>Certified Deep Reinforcement Learning Expert, Udemy ('20)</li>
-    <li>Speaker, Open Machine Learning Conference, Bengaluru ('24)</li>
-  </ul>
+  <section class="section section-dark" id="recognition">
+    <div class="container center">
+      <h2 class="headline reveal">Recognition.</h2>
+      <div class="stats stats-3 reveal">
+        {recognition.map((r) => (
+          <div>
+            <span class="stat-value gradient-text">{r.value}</span>
+            <span class="stat-label">{r.title}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <h2>honors &amp; awards</h2>
-  <ul class="arrows indent">
-    <li>Extraordinary Performance Award ('25)</li>
-    <li>Best Employee Award ('25)</li>
-    <li>CTO Appreciation Award ('26)</li>
-  </ul>
+  <section class="section" id="education">
+    <div class="container-wide">
+      <div class="center" style="margin-bottom: 48px;">
+        <h2 class="headline reveal">Education & credentials.</h2>
+      </div>
+      <div class="tiles">
+        <div class="card reveal tile-full">
+          <span class="eyebrow" style="font-size: 17px;">2014 – 2018 · Sultanpur, IN</span>
+          <h3 style="font-size: 32px;">B.Tech, Information Technology</h3>
+          <p>Kamla Nehru Institute of Technology (KNIT). Relevant courses: Applied Machine Learning, AI, OOP, Data Structures, Algorithms, Databases, Operating Systems.</p>
+        </div>
+        {credentials.map((c, i) => (
+          <div class:list={['card reveal', `reveal-delay-${i % 2}`]}>
+            <h3 style="margin-top: 0;">{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <h2>products &amp; consulting</h2>
-  <p class="indent">
-    I take on a limited number of advisory and delivery engagements outside my
-    full-time role: architecture reviews for RAG/agentic systems, LLM evaluation
-    and fine-tuning strategy, and AI-vendor or AI-talent sourcing for teams
-    building out a GenAI function.
-  </p>
-  <div class="indent"><a class="btn" href="/contact/">get in touch</a></div>
+  <section class="section section-alt center">
+    <div class="container">
+      <h2 class="headline-md reveal">Advisory & consulting.</h2>
+      <p class="subhead reveal" style="max-width: 760px; margin: 0 auto;">
+        A limited number of engagements outside my full-time role: architecture reviews for RAG and
+        agentic systems, LLM evaluation and fine-tuning strategy, and AI-talent or vendor sourcing.
+      </p>
+      <div class="btn-row reveal"><a class="btn" href="/contact/">Get in touch</a></div>
+    </div>
+  </section>
 </BaseLayout>
